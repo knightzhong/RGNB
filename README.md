@@ -31,10 +31,40 @@ Rank-Guided Neural Bridge (RGNB) 的 PyTorch 实现，用于**离线黑盒优化
 ## 安装
 
 ```bash
-pip install torch gpytorch
+pip install -r requirements.txt
+# 或
+pip install torch gpytorch design-bench pyyaml tqdm
 ```
 
-## 快速使用
+### design_bench 离线数据（Morphology 任务需额外安装）
+
+运行 Ant / DKitty 等 Morphology 任务前，需下载 design_bench 离线数据（参考 ROOT 项目）：
+
+```bash
+pip install gdown
+gdown 'https://drive.google.com/uc?id=1n5R0p_7OAejDts6B_WH6qbBRfT8BEiiN'
+unzip design_bench_data.zip
+mv -v design_bench_data $CONDA_PREFIX/lib/python3.x/site-packages  # 替换 3.x 为实际版本
+```
+
+## 训练与评测（design_bench）
+
+参考 ROOT 项目，支持完整训练流程与指标评测：
+
+```bash
+# Ant 任务（默认 8 个 seed）
+python main.py -c configs/Ant.yaml --gpu_ids 0
+
+# DKitty 任务
+python main.py -c configs/Dkitty.yaml --gpu_ids 0
+
+# 仅评测已训练模型
+python main.py -c configs/Ant.yaml --resume results/AntMorphology_Exact_v0/seed0/rgnb_model.pt --eval_only
+```
+
+评测指标：Normalized 100th / 80th / 50th percentile score（与 ROOT 一致）。
+
+## 快速使用（API）
 
 ```python
 import torch

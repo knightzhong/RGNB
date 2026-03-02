@@ -54,12 +54,13 @@ class GPPosteriorMeanSampler:
 
     def __init__(self, config: RGNBConfig):
         self.config = config
-
     def _fit_gp(self, x: torch.Tensor, y: torch.Tensor, lengthscale: float) -> Tuple[ExactGPModel, gpytorch.likelihoods.GaussianLikelihood]:
-        likelihood = gpytorch.likelihoods.GaussianLikelihood()
-        model = ExactGPModel(x, y, likelihood)
+        # 确保 GP 模型与训练数据在同一设备上（避免 cuda/cpu 混用）
+        device = x.device
+        likelihood = gpytorch.likelihoods.GaussianLikelihood().to(device)
+        model = ExactGPModel(x, y, likelihood).to(device)
         model.covar_module.base_kernel.lengthscale = lengthscale
-        likelihood.noise = self.config.gp_noise
+        likelihood.noise = torch.as_tensor(self.config.gp_noise, device=device)
 
         model.train()
         likelihood.train()

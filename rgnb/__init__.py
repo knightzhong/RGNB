@@ -1,5 +1,6 @@
 """RGNB: Rank-Guided Neural Bridge for offline black-box optimization."""
 
+from . import data
 from .core import (
     RGNBConfig,
     SyntheticPair,

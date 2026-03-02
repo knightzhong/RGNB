@@ -1,0 +1,6 @@
+torch>=1.10
+gpytorch>=1.9
+numpy>=1.20
+pyyaml>=6.0
+tqdm>=4.60
+design-bench>=3.0
