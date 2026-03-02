@@ -11,6 +11,7 @@ from .core import (
     BrownianBridgeTrainer,
     RGNBModel,
 )
+from .root_bb import create_root_brownian_bridge
 
 __all__ = [
     "RGNBConfig",
@@ -21,4 +22,5 @@ __all__ = [
     "ManifoldVAE",
     "BrownianBridgeTrainer",
     "RGNBModel",
+    "create_root_brownian_bridge",
 ]

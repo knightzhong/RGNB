@@ -13,13 +13,13 @@ rgnb:
   l0: 1.0
   delta: 0.5
   gp_noise: 1.0e-3
-  bridge_T: 100
-  bridge_epochs: 100
+  bridge_T: 200
+  bridge_epochs: 200
   bridge_lr: 1.0e-3
   top_k: 128
-  cfg_scale: 2.0
-  lambda_rank: 0.2
-  lambda_manifold: 0.1
+  cfg_scale: 1.0
+  lambda_rank: 0.0
+  lambda_manifold: 0.0
   vae_latent_dim: 16
 
 training:

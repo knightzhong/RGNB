@@ -117,15 +117,15 @@ def train(config: dict, args) -> RGNBModel:
     model = RGNBModel(dim=dim, config=rgnb_cfg)
 
     # 从 checkpoint 恢复（可选）
-    if args.resume and os.path.isfile(args.resume):
-        ckpt = torch.load(args.resume, map_location=device)
-        model.rank_net.load_state_dict(ckpt["rank_net"])
-        model.score_net.load_state_dict(ckpt["score_net"])
-        model.vae.load_state_dict(ckpt["vae"])
-        run_config = ckpt.get("config", config)
-        print(f"[RGNB] 已从 {args.resume} 恢复")
-        if args.eval_only:
-            return model, run_config
+    # if args.resume and os.path.isfile(args.resume):
+    #     ckpt = torch.load(args.resume, map_location=device)
+    #     model.rank_net.load_state_dict(ckpt["rank_net"])
+    #     model.score_net.load_state_dict(ckpt["score_net"])
+    #     model.vae.load_state_dict(ckpt["vae"])
+    #     run_config = ckpt.get("config", config)
+    #     print(f"[RGNB] 已从 {args.resume} 恢复")
+    #     if args.eval_only:
+    #         return model, run_config
 
     # 训练参数
     training = config.get("training", {})
@@ -133,28 +133,28 @@ def train(config: dict, args) -> RGNBModel:
     vae_epochs = training.get("vae_epochs", 50)
 
     # 训练
-    print("[RGNB] 训练 RankNet...")
-    model.train_ranknet(x, y, epochs=ranknet_epochs)
-    print("[RGNB] 训练 VAE...")
-    model.train_vae(x, epochs=vae_epochs)
+    # print("[RGNB] 训练 RankNet...")
+    # model.train_ranknet(x, y, epochs=ranknet_epochs)
+    # print("[RGNB] 训练 VAE...")
+    # model.train_vae(x, epochs=vae_epochs)
     print("[RGNB] 训练 Brownian Bridge...")
     model.train_bridge(x, y)
 
     # 保存 checkpoint
-    if args.result_path:
-        save_dir = Path(args.result_path) / task_name.replace("-", "_") / f"seed{args.seed}"
-        save_dir.mkdir(parents=True, exist_ok=True)
-        ckpt_path = save_dir / "rgnb_model.pt"
-        torch.save(
-            {
-                "rank_net": model.rank_net.state_dict(),
-                "score_net": model.score_net.state_dict(),
-                "vae": model.vae.state_dict(),
-                "config": config,
-            },
-            ckpt_path,
-        )
-        print(f"[RGNB] 模型已保存至 {ckpt_path}")
+    # if args.result_path:
+    #     save_dir = Path(args.result_path) / task_name.replace("-", "_") / f"seed{args.seed}"
+    #     save_dir.mkdir(parents=True, exist_ok=True)
+    #     ckpt_path = save_dir / "rgnb_model.pt"
+    #     torch.save(
+    #         {
+    #             "rank_net": model.rank_net.state_dict(),
+    #             "score_net": model.score_net.state_dict(),
+    #             "vae": model.vae.state_dict(),
+    #             "config": config,
+    #         },
+    #         ckpt_path,
+    #     )
+    #     print(f"[RGNB] 模型已保存至 {ckpt_path}")
 
     return model, config
 
@@ -182,9 +182,10 @@ def test(model: RGNBModel, config: dict, args, task) -> tuple[float, float, floa
     x_shape = data.get("x_shape")
 
     # 采样
-    model.rank_net.eval()
-    model.vae.eval()
-    model.score_net.eval()
+    # model.rank_net.eval()
+    # model.vae.eval()
+    # model.score_net.eval()
+    model.bb_model.eval()
     samples = model.sample(x, y)
 
     # 反归一化并评估
@@ -227,7 +228,7 @@ def main():
         task.map_to_logits()
 
     results_100, results_80, results_50 = [], [], []
-    max_seeds = 1 if args.eval_only else min(args.max_seeds, 8)
+    max_seeds = 1 #if args.eval_only else min(args.max_seeds, 8)
 
     for seed in range(max_seeds):
         args.seed = seed

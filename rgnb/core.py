@@ -8,6 +8,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+from .root_bb import create_root_brownian_bridge
+
 
 @dataclass
 class RGNBConfig:
@@ -18,13 +20,14 @@ class RGNBConfig:
     l0: float = 1.0
     delta: float = 0.5
     gp_noise: float = 1e-3
-    bridge_T: int = 100
-    bridge_epochs: int = 100
+    bridge_T: int = 200
+    bridge_epochs: int = 200
     bridge_lr: float = 1e-3
     top_k: int = 128
     cfg_scale: float = 2.0
-    lambda_rank: float = 0.2
+    lambda_rank: float = 0.05
     lambda_manifold: float = 0.1
+    cfg_dropout: float = 0.15
     vae_latent_dim: int = 16
     device: str = "cpu"
 
@@ -82,25 +85,39 @@ class GPPosteriorMeanSampler:
             posterior = likelihood(model(x))
         return posterior.mean
 
-    def _gradient_optimize(self, model: ExactGPModel, likelihood: gpytorch.likelihoods.GaussianLikelihood, x0: torch.Tensor, ascent: bool) -> torch.Tensor:
+    def _gradient_optimize(
+        self,
+        model: ExactGPModel,
+        likelihood: gpytorch.likelihoods.GaussianLikelihood,
+        x0: torch.Tensor,
+        ascent: bool,
+        x_min: torch.Tensor,
+        x_max: torch.Tensor,
+    ) -> torch.Tensor:
         x = x0.clone().detach().requires_grad_(True)
         for _ in range(self.config.m_steps):
             mean = self._posterior_mean(model, likelihood, x)
             grad = torch.autograd.grad(mean.sum(), x, create_graph=False, retain_graph=False)[0]
             direction = 1.0 if ascent else -1.0
-            x = (x + direction * self.config.eta * grad).detach().requires_grad_(True)
+            x_new = x + direction * self.config.eta * grad
+            # clip to the empirical design domain to avoid exploding designs
+            x_new = torch.max(torch.min(x_new, x_max), x_min)
+            x = x_new.detach().requires_grad_(True)
         return x.detach()
 
     def generate(self, x: torch.Tensor, y: torch.Tensor) -> List[SyntheticPair]:
         n = x.size(0)
         all_pairs: List[SyntheticPair] = []
+        # empirical bounds of the (normalized) design space for clipping
+        x_min = x.min(dim=0).values
+        x_max = x.max(dim=0).values
         for _ in range(self.config.ne):
             l = torch.empty(1).uniform_(self.config.l0 - self.config.delta, self.config.l0 + self.config.delta).item()
             model, likelihood = self._fit_gp(x, y, l)
             idx = torch.randint(0, n, (min(self.config.np, n),), device=x.device)
             starts = x[idx]
-            x_plus = self._gradient_optimize(model, likelihood, starts, ascent=True)
-            x_minus = self._gradient_optimize(model, likelihood, starts, ascent=False)
+            x_plus = self._gradient_optimize(model, likelihood, starts, ascent=True, x_min=x_min, x_max=x_max)
+            x_minus = self._gradient_optimize(model, likelihood, starts, ascent=False, x_min=x_min, x_max=x_max)
             y_plus = self._posterior_mean(model, likelihood, x_plus).detach()
             y_minus = self._posterior_mean(model, likelihood, x_minus).detach()
             for j in range(x_plus.size(0)):
@@ -212,7 +229,7 @@ class BrownianBridgeTrainer:
         s = t / float(self.config.bridge_T)
         return 0.1 * s * (1 - s) + 1e-4
 
-    def train(self, pairs: List[SyntheticPair]):
+    def train(self, pairs: List[SyntheticPair], dropout_prob: float | None = None):
         if not pairs:
             return
         x_tgt = torch.stack([p.x_0 for p in pairs])
@@ -222,6 +239,9 @@ class BrownianBridgeTrainer:
         optimizer = torch.optim.Adam(self.score_net.parameters(), lr=self.config.bridge_lr)
         self.score_net.train()
         n = x_tgt.size(0)
+
+        if dropout_prob is None:
+            dropout_prob = getattr(self.config, "cfg_dropout", 0.15)
 
         for _ in range(self.config.bridge_epochs):
             idx = torch.randint(0, n, (min(512, n),), device=x_tgt.device)
@@ -235,7 +255,15 @@ class BrownianBridgeTrainer:
             xt = mt.unsqueeze(-1) * x0 + (1 - mt).unsqueeze(-1) * xT + torch.sqrt(kappa_tt).unsqueeze(-1) * eps
             target = mt.unsqueeze(-1) * (xT - x0) + torch.sqrt(kappa_tt).unsqueeze(-1) * eps
 
-            eps_hat = self.score_net(xt, t / float(self.config.bridge_T), y)
+            # classifier-free style conditioning dropout on y
+            if dropout_prob > 0.0:
+                mask = torch.rand_like(y) < dropout_prob
+                y_train = y.clone()
+                y_train[mask] = 0.0
+            else:
+                y_train = y
+
+            eps_hat = self.score_net(xt, t / float(self.config.bridge_T), y_train)
             loss = F.mse_loss(eps_hat, target)
             optimizer.zero_grad()
             loss.backward()
@@ -245,18 +273,21 @@ class BrownianBridgeTrainer:
 class RGNBModel:
     def __init__(self, dim: int, config: RGNBConfig | None = None):
         self.config = config or RGNBConfig()
-        self.rank_net = RankNet(dim).to(self.config.device)
-        self.score_net = ScoreNetwork(dim).to(self.config.device)
-        self.vae = ManifoldVAE(dim, latent_dim=self.config.vae_latent_dim).to(self.config.device)
+        # self.rank_net = RankNet(dim).to(self.config.device)
+        # self.score_net = ScoreNetwork(dim).to(self.config.device)
+        # self.vae = ManifoldVAE(dim, latent_dim=self.config.vae_latent_dim).to(self.config.device)
         self.synth = GPPosteriorMeanSampler(self.config)
-        self.bridge = BrownianBridgeTrainer(self.score_net, self.config)
+
+        # ROOT Brownian Bridge 模型（与 ROOT 完全一致的训练 / 采样逻辑）
+        self.bb_model = create_root_brownian_bridge(dim).to(self.config.device)
+        self.bb_optimizer = torch.optim.Adam(self.bb_model.get_parameters(), lr=self.config.bridge_lr)
 
     def train_ranknet(self, x: torch.Tensor, y: torch.Tensor, epochs: int = 50, use_bce: bool = True):
         x, y = x.to(self.config.device), y.to(self.config.device)
         opt = torch.optim.Adam(self.rank_net.parameters(), lr=1e-3)
         n = x.size(0)
         self.rank_net.train()
-        for _ in range(epochs):
+        for epoch in range(epochs):
             i = torch.randint(0, n, (min(512, n),), device=x.device)
             j = torch.randint(0, n, (min(512, n),), device=x.device)
             xi, xj = x[i], x[j]
@@ -271,12 +302,25 @@ class RGNBModel:
             loss.backward()
             opt.step()
 
+            # 简单调试：每若干个 epoch 打印一次 pairwise 排序准确率
+            if (epoch + 1) % max(1, epochs // 5) == 0:
+                with torch.no_grad():
+                    i_dbg = torch.randint(0, n, (min(2048, n),), device=x.device)
+                    j_dbg = torch.randint(0, n, (min(2048, n),), device=x.device)
+                    xi_dbg, xj_dbg = x[i_dbg], x[j_dbg]
+                    yi_dbg, yj_dbg = y[i_dbg], y[j_dbg]
+                    s_i_dbg = self.rank_net(xi_dbg)
+                    s_j_dbg = self.rank_net(xj_dbg)
+                    acc = ((yi_dbg >= yj_dbg) == (s_i_dbg >= s_j_dbg)).float().mean().item()
+                    print(f"[RankNet][epoch {epoch+1}/{epochs}] loss={loss.item():.4f}, pairwise_acc≈{acc:.3f}")
+
     def train_vae(self, x: torch.Tensor, epochs: int = 50):
         x = x.to(self.config.device)
         opt = torch.optim.Adam(self.vae.parameters(), lr=1e-3)
         self.vae.train()
         n = x.size(0)
-        for _ in range(epochs):
+        running = 0.0
+        for epoch in range(epochs):
             idx = torch.randint(0, n, (min(512, n),), device=x.device)
             xb = x[idx]
             recon, mu, logvar = self.vae(xb)
@@ -284,48 +328,87 @@ class RGNBModel:
             opt.zero_grad()
             loss.backward()
             opt.step()
+            running += loss.item()
+
+            if (epoch + 1) % max(1, epochs // 5) == 0:
+                avg = running / max(1, epochs // 5)
+                print(f"[VAE][epoch {epoch+1}/{epochs}] loss≈{avg:.4f}")
+                running = 0.0
 
     def train_bridge(self, x: torch.Tensor, y: torch.Tensor):
-        pairs = self.synth.generate(x.to(self.config.device), y.to(self.config.device))
-        self.bridge.train(pairs)
+        """
+        使用 ROOT 的 BrownianBridgeModel 在 GP 合成的 (x_high, x_low, y_high, y_low) 上训练。
+        """
+        device = self.config.device
+        x = x.to(device)
+        y = y.to(device)
+
+        self.bb_model.train()
+        pairs = self.synth.generate(x, y)
+        for epoch in range(self.config.bridge_epochs):
+            # 每个 epoch 从 GP 重新合成一批 pairs，贴近 ROOT 的做法
+            
+
+            if not pairs:
+                print("[Bridge][ROOT] WARNING: no synthetic pairs generated, bridge will be skipped.")
+                return
+
+            x_high = torch.stack([p.x_0 for p in pairs]).to(device)
+            x_low = torch.stack([p.x_t for p in pairs]).to(device)
+            y_high = torch.stack([p.y_0 for p in pairs]).float().to(device).unsqueeze(-1)
+            y_low = torch.stack([p.y_t for p in pairs]).float().to(device).unsqueeze(-1)
+
+            loss, _ = self.bb_model(x_high, y_high, x_low, y_low)
+            self.bb_optimizer.zero_grad()
+            loss.backward()
+            self.bb_optimizer.step()
+
+            if (epoch + 1) % max(1, self.config.bridge_epochs // 5) == 0:
+                print(f"[Bridge][ROOT][epoch {epoch+1}/{self.config.bridge_epochs}] loss≈{loss.item():.4f}")
 
     def fit(self, x: torch.Tensor, y: torch.Tensor):
         self.train_ranknet(x, y)
         self.train_vae(x)
         self.train_bridge(x, y)
 
-    def _cfg_score(self, xt: torch.Tensor, t_scaled: torch.Tensor, y_cond: torch.Tensor) -> torch.Tensor:
-        eps_cond = self.score_net(xt, t_scaled, y_cond)
-        eps_uncond = self.score_net(xt, t_scaled, torch.zeros_like(y_cond))
-        return eps_uncond + self.config.cfg_scale * (eps_cond - eps_uncond)
-
     def sample(self, x_offline: torch.Tensor, y_offline: torch.Tensor, steps: int | None = None) -> torch.Tensor:
-        self.rank_net.eval()
-        self.vae.eval()
-        self.score_net.eval()
-
-        steps = steps or self.config.bridge_T
+        """
+        使用 ROOT 的 BrownianBridgeModel 做采样：
+        - 从离线数据中选取一批低分候选 (x_low, y_low)
+        - 构造统一的高分条件 y_high
+        - 调用 bb_model.sample 得到高分候选
+        """
         device = self.config.device
+        self.bb_model.eval()
+
         x_offline = x_offline.to(device)
         y_offline = y_offline.to(device)
 
-        top_idx = torch.argsort(y_offline, descending=True)[: min(self.config.top_k, x_offline.size(0))]
-        x = x_offline[top_idx].clone().detach().requires_grad_(True)
-        target_y = y_offline[top_idx]
+        # 选取 top_k 个低分样本作为起点（与 ROOT 的 "low candidates" 一致）
+        n = x_offline.size(0)
+        k = min(self.config.top_k, n)
+        low_idx = torch.argsort(y_offline, descending=False)[:k]
+        x_low = x_offline[low_idx]
+        y_low = y_offline[low_idx].unsqueeze(-1)
 
-        for t in range(steps, 0, -1):
-            t_scaled = torch.full((x.size(0), 1), t / float(steps), device=device)
-            kappa_t = self.bridge.kappa(torch.full((x.size(0),), float(t), device=device))
-            score = self._cfg_score(x, t_scaled, target_y)
-            mu_theta = x - (1.0 / steps) * score
+        # 目标高分：简单使用当前 offline 的最大值作为 oracle proxy
+        target_y_val = y_offline.max()
+        y_high = torch.full_like(y_low, target_y_val)
 
-            rank_score = self.rank_net(x).sum()
-            g_rank = torch.autograd.grad(rank_score, x, retain_graph=True, create_graph=True)[0]
+        print(
+            f"[Sample][ROOT] low candidates: mean={y_low.mean().item():.4f}, "
+            f"min={y_low.min().item():.4f}, max={y_low.max().item():.4f}; "
+            f"target_y={target_y_val.item():.4f}"
+        )
 
-            dens = self.vae.log_density_proxy(x).sum()
-            g_mani = torch.autograd.grad(dens, x, retain_graph=True, create_graph=True)[0]
+        with torch.no_grad():
+            high_candidates = self.bb_model.sample(
+                x_low,
+                y_low,
+                y_high,
+                clip_denoised=False,
+                sample_mid_step=False,
+                classifier_free_guidance_weight=0.0,
+            )
 
-            noise = torch.randn_like(x) * torch.sqrt(kappa_t).unsqueeze(-1)
-            x = (mu_theta + self.config.lambda_rank * g_rank + self.config.lambda_manifold * g_mani + noise).requires_grad_(True)
-
-        return x.detach()
+        return high_candidates
