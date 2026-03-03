@@ -35,14 +35,16 @@ rgnb:
   cfg_scale: 1.0
 
   # ===== RGNB 额外引导开关 =====
-  # Rank 梯度引导
-  lambda_rank: 0.05
-  # VAE 流形密度引导
-  lambda_manifold: 0.10
+  # Rank 梯度引导（归一化后的梯度 * lambda_rank，建议 0.01-0.1）
+  lambda_rank: 0.03
+  # VAE 流形密度引导（归一化后的梯度 * lambda_manifold，建议 0.01-0.1）
+  lambda_manifold: 0.05
+  # 引导仅在采样后期施加：0.5 表示仅在后 50% 步骤中注入引导
+  guidance_start_ratio: 0.5
   # Brownian Bridge 训练阶段 CFG dropout 概率（与 training.classifier_free_guidance_prob 一致）
   cfg_dropout: 0.15
-  # 目标分外推倍率：y_high = base_target * target_extrap_factor
-  target_extrap_factor: 1.2
+  # 目标分外推倍率：仅在未提供 high_cond_score 时使用
+  target_extrap_factor: 1.0
 
   vae_latent_dim: 16
   # EMA（与 ROOT 一致，测试时用 EMA 权重，常提升 1～3 点）

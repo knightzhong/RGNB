@@ -560,16 +560,15 @@ class RGNBModel:
         y_low = y_low.to(device).unsqueeze(-1)
 
         # ---------------------------
-        # 1. 目标分外推（Target Extrapolation）
-        #    y_high = max(y_offline) * target_extrap_factor
+        # 1. 目标分条件
+        #    当已提供 high_cond_score 时直接使用（main.py 已完成 oracle * alpha 的计算）；
+        #    仅在未提供时才用 offline max * target_extrap_factor 作为退化方案。
         # ---------------------------
-        offline_max = y_low.max().item()
-        factor = getattr(self.config, "target_extrap_factor", 1.2)
         if high_cond_score is not None:
-            base_target = high_cond_score
+            target_val = high_cond_score
         else:
-            base_target = offline_max
-        target_val = base_target * factor
+            factor = getattr(self.config, "target_extrap_factor", 1.0)
+            target_val = y_low.max().item() * factor
         y_high = torch.full_like(y_low, target_val)
 
         if self._ema is not None:
@@ -591,33 +590,35 @@ class RGNBModel:
             return out.expand(x_shape)
 
         steps = self.bb_model.steps  # 采样时间步（从 T-1 到 0）
+        num_steps = len(steps)
+        T = self.bb_model.num_timesteps
+
+        # 引导只在后期施加：仅当进度 > guidance_start_ratio 时注入
+        guidance_start_ratio = getattr(self.config, "guidance_start_ratio", 0.5)
+        guidance_start_idx = int(num_steps * guidance_start_ratio)
+        lam_rank = getattr(self.config, "lambda_rank", 0.0)
+        lam_mani = getattr(self.config, "lambda_manifold", 0.0)
+        use_guidance = (lam_rank > 0.0 or lam_mani > 0.0)
+
         x_t = x_low.clone()
 
-        # 采样循环：从大步到小步，手动实现与 ROOT BrownianBridgeModel.p_sample_loop 一致的动力学
-        for i in range(len(steps)):
+        for i in range(num_steps):
             t_idx = steps[i].item()
             t = torch.full((x_t.shape[0],), t_idx, device=device, dtype=torch.long)
 
-            # ---------------------------
-            # 2. 调用 ROOT 原生 Score 网络（denoise_fn）
-            #    使用 classifier-free guidance 形式构造 ε_θ / objective_recon
-            # ---------------------------
-            # 条件分支
+            # ------ Score 网络预测 + CFG ------
             eps_cond = self.bb_model.denoise_fn(x_t, t, y_low, y_high)
-            # 无条件分支（y=0）
             zeros_y = torch.zeros_like(y_low)
             eps_uncond = self.bb_model.denoise_fn(x_t, t, zeros_y, zeros_y)
             objective_recon = (1.0 + cfg_weight) * eps_cond - cfg_weight * eps_uncond
 
-            # 根据 ROOT BrownianBridgeModel 的定义，从 objective_recon 反推 x0 估计
             x0_recon = self.bb_model.predict_x0_from_objective(x_t, x_low, t, objective_recon)
 
             if t_idx == 0:
-                # 最后一跳：直接返回去噪后的 x0_recon，并在此处注入引导项
                 x_next_mean = x0_recon
+                sigma_t_scalar = 0.0
                 noise_term = 0.0
             else:
-                # 与 ROOT BrownianBridgeModel.p_sample 中的线性 schedule / 方差计算保持一致
                 n_t_idx = steps[i + 1].item()
                 n_t = torch.full((x_t.shape[0],), n_t_idx, device=device, dtype=torch.long)
 
@@ -626,9 +627,9 @@ class RGNBModel:
                 var_t = _extract(self.bb_model.variance_t, t, x_t.shape)
                 var_nt = _extract(self.bb_model.variance_t, n_t, x_t.shape)
 
-                # 这里的 sigma2_t 即为离散后向步长对应的 \tilde{kappa}_{t-1}
                 sigma2_t = (var_t - var_nt * (1.0 - m_t) ** 2 / (1.0 - m_nt) ** 2) * var_nt / var_t
                 sigma_t = torch.sqrt(sigma2_t) * self.bb_model.eta
+                sigma_t_scalar = sigma_t.mean().item()
 
                 noise = torch.randn_like(x_t)
                 x_tminus_mean = (
@@ -637,38 +638,47 @@ class RGNBModel:
                     + torch.sqrt((var_nt - sigma2_t) / var_t)
                     * (x_t - (1.0 - m_t) * x0_recon - m_t * x_low)
                 )
-
                 x_next_mean = x_tminus_mean
                 noise_term = sigma_t * noise
 
-            # ---------------------------
-            # 3. RGNB 额外引导：
-            #    - Rank guidance: λ_rank * g_rank
-            #    - Manifold guidance: λ_manifold * g_mani
-            # ---------------------------
-            x_for_guidance = x_next_mean.detach().clone().requires_grad_(True)
+            # ------ RGNB 引导（仅在后期步骤施加） ------
+            if use_guidance and i >= guidance_start_idx and t_idx > 0:
+                # 时间衰减系数：从 0 线性增长到 1（越接近 t=0 引导越强）
+                progress = (i - guidance_start_idx) / max(num_steps - guidance_start_idx, 1)
 
-            # Rank 引导：梯度归一化后再加权
-            rank_score = self.rank_net(x_for_guidance).sum()
-            g_rank = torch.autograd.grad(rank_score, x_for_guidance, create_graph=False, retain_graph=False)[0]
-            g_rank = g_rank / (g_rank.norm(dim=-1, keepdim=True) + 1e-8)
+                x_for_g = x_next_mean.detach().clone().requires_grad_(True)
 
-            # Manifold 引导：使用 VAE 近似 log p(x) 的梯度
-            log_p = self.vae.log_density_proxy(x_for_guidance).sum()
-            g_mani = torch.autograd.grad(log_p, x_for_guidance, create_graph=False, retain_graph=False)[0]
+                # Rank 引导
+                if lam_rank > 0.0:
+                    rs = self.rank_net(x_for_g).sum()
+                    g_rank = torch.autograd.grad(rs, x_for_g, retain_graph=True)[0]
+                    g_rank = g_rank / (g_rank.norm(dim=-1, keepdim=True) + 1e-8)
+                else:
+                    g_rank = torch.zeros_like(x_next_mean)
 
-            total_guidance = (
-                getattr(self.config, "lambda_rank", 0.0) * g_rank
-                + getattr(self.config, "lambda_manifold", 0.0) * g_mani
-            )
+                # Manifold 引导（确定性 VAE 路径，已在上面修复）
+                if lam_mani > 0.0:
+                    lp = self.vae.log_density_proxy(x_for_g).sum()
+                    g_mani = torch.autograd.grad(lp, x_for_g)[0]
+                    g_mani = g_mani / (g_mani.norm(dim=-1, keepdim=True) + 1e-8)
+                else:
+                    g_mani = torch.zeros_like(x_next_mean)
 
-            x_guided = x_next_mean + total_guidance
+                raw_guidance = lam_rank * g_rank + lam_mani * g_mani
 
-            # 合成随机噪声项（除了 t=0 的最后一步）
+                # 梯度裁剪：引导幅度不超过当前步噪声尺度的一半
+                if sigma_t_scalar > 0:
+                    g_norm = raw_guidance.norm(dim=-1, keepdim=True)
+                    max_norm = 0.5 * sigma_t_scalar
+                    raw_guidance = raw_guidance * torch.clamp(max_norm / (g_norm + 1e-8), max=1.0)
+
+                x_next_mean = x_next_mean + progress * raw_guidance
+
+            # 合成噪声项
             if isinstance(noise_term, float) and noise_term == 0.0:
-                x_t = x_guided
+                x_t = x_next_mean
             else:
-                x_t = x_guided + noise_term
+                x_t = x_next_mean + noise_term
 
         # 采样结束，恢复 EMA 权重，并返回与外部无梯度关联的结果
         if self._ema is not None:
