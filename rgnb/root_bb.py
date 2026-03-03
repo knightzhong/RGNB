@@ -33,10 +33,11 @@ def _ensure_root_on_path() -> None:
 _ensure_root_on_path()
 
 try:
-    # ROOT 项目中的 BrownianBridgeModel
     from model.BrownianBridge.BrownianBridgeModel import BrownianBridgeModel  # type: ignore
+    from runners.utils import weights_init  # type: ignore
 except Exception as e:  # pragma: no cover - 环境缺失时的友好错误
     BrownianBridgeModel = None  # type: ignore
+    weights_init = None  # type: ignore
     _import_error = e
 else:
     _import_error = None
@@ -67,19 +68,19 @@ def build_minimal_bb_config(dim: int) -> DotNamespace:
     cfg.BB = DotNamespace()
     params = DotNamespace()
 
-    # 时间与方差 schedule
-    params.num_timesteps = 200
+    # 时间与方差 schedule（对齐 ROOT Dkitty_GPFixed.yaml）
+    params.num_timesteps = 1000
     params.mt_type = "linear"
     params.max_var = 1.0
-    params.eta = 1.0
+    params.eta = 0.2
 
-    # 采样相关
-    params.skip_sample = False
+    # 采样相关（对齐：skip_sample=true, sample_step=200, sample_type=linear）
+    params.skip_sample = True
     params.sample_type = "linear"
     params.sample_step = 200
 
-    # 损失与目标
-    params.loss_type = "l2"
+    # 损失与目标（对齐 ROOT：loss_type=l1, objective=grad）
+    params.loss_type = "l1"
     params.objective = "grad"
 
     # MLP 参数：直接在 design 向量空间上工作
@@ -98,9 +99,7 @@ def build_minimal_bb_config(dim: int) -> DotNamespace:
 def create_root_brownian_bridge(dim: int) -> BrownianBridgeModel:
     """
     创建一个在 design 向量空间上工作的 ROOT BrownianBridgeModel 实例。
-
-    Args:
-        dim: 设计向量维度
+    与 ROOT BBDMRunner 一致：创建后应用 weights_init。
     """
     if BrownianBridgeModel is None:
         raise ImportError(
@@ -108,5 +107,8 @@ def create_root_brownian_bridge(dim: int) -> BrownianBridgeModel:
             f"以及导入错误为：{_import_error}"
         )
     cfg = build_minimal_bb_config(dim)
-    return BrownianBridgeModel(cfg)
+    model = BrownianBridgeModel(cfg)
+    if weights_init is not None:
+        model.apply(weights_init)
+    return model
 

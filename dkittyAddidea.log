@@ -4,14 +4,25 @@ nohup: 忽略输入
   任务: DKittyMorphology-Exact-v0
   设备: cuda:0
 ============================================================
-[RGNB] 训练 Brownian Bridge...
-[Bridge][ROOT][epoch 20/100] loss≈0.2083
-[Bridge][ROOT][epoch 40/100] loss≈0.1895
-[Bridge][ROOT][epoch 60/100] loss≈0.1833
-[Bridge][ROOT][epoch 80/100] loss≈0.1798
-[Bridge][ROOT][epoch 100/100] loss≈0.1764
-[Sample][ROOT] low candidates: mean=0.9310, min=0.9281, max=0.9342; target_y=1.1715, cfg_weight=0.00
-sampling loop time step:   0%|          | 0/200 [00:00<?, ?it/s]sampling loop time step:  60%|█████▉    | 119/200 [00:00<00:00, 1184.02it/s]sampling loop time step: 100%|██████████| 200/200 [00:00<00:00, 1098.41it/s]
+[RGNB] 训练 RankNet...
+[RankNet][epoch 10/50] loss=0.5222, pairwise_acc≈0.774
+[RankNet][epoch 20/50] loss=0.4328, pairwise_acc≈0.815
+[RankNet][epoch 30/50] loss=0.3761, pairwise_acc≈0.831
+[RankNet][epoch 40/50] loss=0.3679, pairwise_acc≈0.836
+[RankNet][epoch 50/50] loss=0.3570, pairwise_acc≈0.835
+[RGNB] 训练 VAE...
+[VAE][epoch 10/50] loss≈0.9323
+[VAE][epoch 20/50] loss≈0.8441
+[VAE][epoch 30/50] loss≈0.5598
+[VAE][epoch 40/50] loss≈0.3742
+[VAE][epoch 50/50] loss≈0.2839
+[RGNB] 训练 Brownian Bridge (ROOT BrownianBridgeModel)...
+[Bridge][ROOT][epoch 20/100] loss≈0.2104
+[Bridge][ROOT][epoch 40/100] loss≈0.1916
+[Bridge][ROOT][epoch 60/100] loss≈0.1852
+[Bridge][ROOT][epoch 80/100] loss≈0.1804
+[Bridge][ROOT][epoch 100/100] loss≈0.1780
+[Sample][RGNB] low candidates: mean=0.9310, min=0.9281, max=0.9342; target_y=1.4058, cfg_weight=-1.50, lambda_rank=0.0500, lambda_manifold=0.1000
 WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
 WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
 WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
@@ -140,15 +151,15 @@ WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initializ
 WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
 WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
 WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
-Seed 0 结果: 100th=0.9730, 80th=0.9356, 50th=0.9138
+Seed 0 结果: 100th=0.9071, 80th=0.8923, 50th=0.8838
 
 ============================================================
 RGNB 评测汇总
 ============================================================
 Normalized 100th percentile score:
-  Mean: 0.9730, Std: 0.0000
+  Mean: 0.9071, Std: 0.0000
 Normalized 80th percentile score:
-  Mean: 0.9356, Std: 0.0000
+  Mean: 0.8923, Std: 0.0000
 Normalized 50th percentile score:
-  Mean: 0.9138, Std: 0.0000
+  Mean: 0.8838, Std: 0.0000
 ============================================================

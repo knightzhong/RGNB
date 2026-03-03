@@ -23,6 +23,7 @@ from rgnb.data import (
     get_offline_data,
     evaluate_with_oracle,
     compute_normalized_percentiles,
+    TASK_ORACLE,
 )
 
 
@@ -54,6 +55,7 @@ def load_config(config_path: str) -> dict:
 def config_to_rgnb_config(cfg: dict, device: str) -> RGNBConfig:
     """将 YAML 配置转为 RGNBConfig。"""
     rgnb = cfg.get("rgnb", {})
+    training = cfg.get("training", {})
     return RGNBConfig(
         ne=rgnb.get("ne", 8),
         np=rgnb.get("np", 1024),
@@ -62,14 +64,30 @@ def config_to_rgnb_config(cfg: dict, device: str) -> RGNBConfig:
         l0=rgnb.get("l0", 1.0),
         delta=rgnb.get("delta", 0.5),
         gp_noise=rgnb.get("gp_noise", 1e-3),
-        bridge_T=rgnb.get("bridge_T", 100),
+        gp_max_fit=rgnb.get("gp_max_fit", 4096),
+        gp_threshold_diff=rgnb.get("gp_threshold_diff", 1e-3),
+        # 对齐 ROOT: type_of_initial_points（highest / lowest / all）
+        gp_initial_points_type=rgnb.get("type_of_initial_points", rgnb.get("gp_initial_points_type", "all")),
+        bridge_T=rgnb.get("bridge_T", 200),
         bridge_epochs=rgnb.get("bridge_epochs", 100),
         bridge_lr=rgnb.get("bridge_lr", 1e-3),
         top_k=rgnb.get("top_k", 128),
         cfg_scale=rgnb.get("cfg_scale", 2.0),
         lambda_rank=rgnb.get("lambda_rank", 0.2),
         lambda_manifold=rgnb.get("lambda_manifold", 0.1),
+        cfg_dropout=rgnb.get(
+            "cfg_dropout",
+            training.get("classifier_free_guidance_prob", 0.15),
+        ),
+        target_extrap_factor=rgnb.get("target_extrap_factor", 1.2),
         vae_latent_dim=rgnb.get("vae_latent_dim", 16),
+        gp_seed=rgnb.get("gp_seed", 0),
+        val_frac=rgnb.get("val_frac", 0.1),
+        bridge_batch_size=rgnb.get("bridge_batch_size", 64),
+        use_ema=rgnb.get("use_ema", True),
+        ema_decay=rgnb.get("ema_decay", 0.995),
+        start_ema_step=rgnb.get("start_ema_step", 4000),
+        update_ema_interval=rgnb.get("update_ema_interval", 8),
         device=device,
     )
 
@@ -128,16 +146,16 @@ def train(config: dict, args) -> RGNBModel:
     #         return model, run_config
 
     # 训练参数
-    training = config.get("training", {})
-    ranknet_epochs = training.get("ranknet_epochs", 50)
-    vae_epochs = training.get("vae_epochs", 50)
+    training_cfg = config.get("training", {})
+    ranknet_epochs = training_cfg.get("ranknet_epochs", 50)
+    vae_epochs = training_cfg.get("vae_epochs", 50)
 
-    # 训练
-    # print("[RGNB] 训练 RankNet...")
-    # model.train_ranknet(x, y, epochs=ranknet_epochs)
-    # print("[RGNB] 训练 VAE...")
-    # model.train_vae(x, epochs=vae_epochs)
-    print("[RGNB] 训练 Brownian Bridge...")
+    # 训练 RankNet、VAE 与 Brownian Bridge
+    print("[RGNB] 训练 RankNet...")
+    model.train_ranknet(x, y, epochs=ranknet_epochs)
+    print("[RGNB] 训练 VAE...")
+    model.train_vae(x, epochs=vae_epochs)
+    print("[RGNB] 训练 Brownian Bridge (ROOT BrownianBridgeModel)...")
     model.train_bridge(x, y)
 
     # 保存 checkpoint
@@ -181,12 +199,47 @@ def test(model: RGNBModel, config: dict, args, task) -> tuple[float, float, floa
     is_discrete = data["is_discrete"]
     x_shape = data.get("x_shape")
 
-    # 采样
-    # model.rank_net.eval()
-    # model.vae.eval()
-    # model.score_net.eval()
-    model.bb_model.eval()
-    samples = model.sample(x, y)
+    # ===== 起点选择与目标高分，对齐 ROOT BaseRunner.test =====
+    testing_cfg = config.get("testing", {})
+    training_cfg = config.get("training", {})
+    num_candidates = testing_cfg.get("num_candidates", 128)
+    type_sampling = testing_cfg.get("type_sampling", "highest")
+    alpha = testing_cfg.get("alpha", 0.8)
+
+    # 选 low candidates（在 type_sampling='highest' 时即为 top-k high candidates）
+    y_flat = y.view(-1)
+    idx_sorted = torch.argsort(y_flat)
+    if type_sampling == "highest":
+        low_idx = idx_sorted[-num_candidates:]
+    elif type_sampling == "lowest":
+        low_idx = idx_sorted[:num_candidates]
+    else:
+        # 其它类型简单退化为 highest
+        low_idx = idx_sorted[-num_candidates:]
+
+    x_low = x[low_idx]
+    y_low = y[low_idx]
+
+    # oracle y_max -> 归一化到当前 offline 分布，再乘 alpha
+    oracle = TASK_ORACLE.get(task_name, None)
+    if oracle is not None:
+        oracle_y_max = oracle["max"]
+        norm_oracle_y_max = (oracle_y_max - data["mean_y"].item()) / data["std_y"].item()
+        high_cond_score = norm_oracle_y_max * alpha
+    else:
+        high_cond_score = y.max().item()
+
+    # 与 ROOT BBDMRunner.sample 一致：只有在 use_classifier_free_guidance=True 时才启用 CFG
+    use_cfg_test = testing_cfg.get(
+        "use_classifier_free_guidance",
+        training_cfg.get("use_classifier_free_guidance", True),
+    )
+    cfg_weight = (
+        testing_cfg.get("classifier_free_guidance_weight", 0.0) if use_cfg_test else 0.0
+    )
+
+    # 采样（由 ROOT BrownianBridgeModel + RGNB 引导联合完成）
+    samples = model.sample(x_low, y_low, high_cond_score=high_cond_score, cfg_weight=cfg_weight)
 
     # 反归一化并评估
     scores = evaluate_with_oracle(

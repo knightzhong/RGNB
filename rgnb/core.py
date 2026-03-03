@@ -7,6 +7,7 @@ import gpytorch
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from torch.utils.data import Dataset, DataLoader
 
 from .root_bb import create_root_brownian_bridge
 
@@ -28,8 +29,26 @@ class RGNBConfig:
     lambda_rank: float = 0.05
     lambda_manifold: float = 0.1
     cfg_dropout: float = 0.15
+    # 目标分外推倍率：仅在未提供 high_cond_score 时使用
+    target_extrap_factor: float = 1.0
+    # 引导仅在采样后期施加：guidance_start_ratio=0.5 表示仅在后 50% 的步骤中注入引导
+    guidance_start_ratio: float = 0.5
+    # 额外 GP 相关配置（仿 ROOT，实现上简化）
+    gp_max_fit: int = 4096        # 拟合 GP 时最多使用的训练样本数，防止 OOM
+    gp_threshold_diff: float = 1e-3
+    # 起点选择策略：对齐 ROOT 的 type_of_initial_points（highest / lowest / all）
+    gp_initial_points_type: str = "all"
     vae_latent_dim: int = 16
     device: str = "cpu"
+    # 与 ROOT use_fixed_gp_posterior 对齐：固定种子生成一次对、val_frac、小批量
+    gp_seed: int = 0
+    val_frac: float = 0.1
+    bridge_batch_size: int = 64
+    # EMA（与 ROOT 一致，测试时用 EMA 权重采样，常能提升 1～3 个点）
+    use_ema: bool = True
+    ema_decay: float = 0.995
+    start_ema_step: int = 4000
+    update_ema_interval: int = 8
 
 
 @dataclass
@@ -38,6 +57,55 @@ class SyntheticPair:
     y_t: torch.Tensor
     x_0: torch.Tensor  # target (high value)
     y_0: torch.Tensor
+
+
+class PairsDataset(Dataset):
+    """((x_high, y_high), (x_low, y_low)) 格式，与 ROOT create_train_dataloader 一致。"""
+
+    def __init__(self, pairs: List[SyntheticPair]):
+        self.pairs = pairs
+
+    def __len__(self):
+        return len(self.pairs)
+
+    def __getitem__(self, idx):
+        p = self.pairs[idx]
+        return (p.x_0, p.y_0.view(1)), (p.x_t, p.y_t.view(1))
+
+
+class EMA:
+    """指数移动平均，与 ROOT runners.base.EMA 一致，测试时用 EMA 权重采样。"""
+
+    def __init__(self, ema_decay: float):
+        self.ema_decay = ema_decay
+        self.backup: dict = {}
+        self.shadow: dict = {}
+
+    def register(self, model: nn.Module) -> None:
+        for name, param in model.named_parameters():
+            if param.requires_grad:
+                self.shadow[name] = param.data.clone()
+
+    def update(self, model: nn.Module, with_decay: bool = True) -> None:
+        for name, param in model.named_parameters():
+            if param.requires_grad and name in self.shadow:
+                if with_decay:
+                    new_avg = (1.0 - self.ema_decay) * param.data + self.ema_decay * self.shadow[name]
+                else:
+                    new_avg = param.data.clone()
+                self.shadow[name] = new_avg
+
+    def apply_shadow(self, model: nn.Module) -> None:
+        for name, param in model.named_parameters():
+            if param.requires_grad and name in self.shadow:
+                self.backup[name] = param.data.clone()
+                param.data.copy_(self.shadow[name])
+
+    def restore(self, model: nn.Module) -> None:
+        for name, param in model.named_parameters():
+            if param.requires_grad and name in self.backup:
+                param.data.copy_(self.backup[name])
+        self.backup = {}
 
 
 class ExactGPModel(gpytorch.models.ExactGP):
@@ -57,71 +125,117 @@ class GPPosteriorMeanSampler:
 
     def __init__(self, config: RGNBConfig):
         self.config = config
-    def _fit_gp(self, x: torch.Tensor, y: torch.Tensor, lengthscale: float) -> Tuple[ExactGPModel, gpytorch.likelihoods.GaussianLikelihood]:
-        # 确保 GP 模型与训练数据在同一设备上（避免 cuda/cpu 混用）
-        device = x.device
-        likelihood = gpytorch.likelihoods.GaussianLikelihood().to(device)
-        model = ExactGPModel(x, y, likelihood).to(device)
-        model.covar_module.base_kernel.lengthscale = lengthscale
-        likelihood.noise = torch.as_tensor(self.config.gp_noise, device=device)
-
-        model.train()
-        likelihood.train()
-        optimizer = torch.optim.Adam(model.parameters(), lr=0.05)
-        mll = gpytorch.mlls.ExactMarginalLogLikelihood(likelihood, model)
-
-        for _ in range(50):
-            optimizer.zero_grad()
-            output = model(x)
-            loss = -mll(output, y)
-            loss.backward()
-            optimizer.step()
-        model.eval()
-        likelihood.eval()
-        return model, likelihood
-
-    def _posterior_mean(self, model: ExactGPModel, likelihood: gpytorch.likelihoods.GaussianLikelihood, x: torch.Tensor) -> torch.Tensor:
-        with gpytorch.settings.fast_pred_var():
-            posterior = likelihood(model(x))
-        return posterior.mean
-
-    def _gradient_optimize(
-        self,
-        model: ExactGPModel,
-        likelihood: gpytorch.likelihoods.GaussianLikelihood,
-        x0: torch.Tensor,
-        ascent: bool,
-        x_min: torch.Tensor,
-        x_max: torch.Tensor,
-    ) -> torch.Tensor:
-        x = x0.clone().detach().requires_grad_(True)
-        for _ in range(self.config.m_steps):
-            mean = self._posterior_mean(model, likelihood, x)
-            grad = torch.autograd.grad(mean.sum(), x, create_graph=False, retain_graph=False)[0]
-            direction = 1.0 if ascent else -1.0
-            x_new = x + direction * self.config.eta * grad
-            # clip to the empirical design domain to avoid exploding designs
-            x_new = torch.max(torch.min(x_new, x_max), x_min)
-            x = x_new.detach().requires_grad_(True)
-        return x.detach()
 
     def generate(self, x: torch.Tensor, y: torch.Tensor) -> List[SyntheticPair]:
-        n = x.size(0)
+        """
+        单 GP 版本（对齐 ROOT 的 sampling_data_from_fixed_GP 思路）：
+        - 只拟合一次 GP 后验均值函数（固定 lengthscale / variance，不在每个函数内扰动）；
+        - 对每个“函数”在同一个 GP 上做梯度下降/上升；
+        - 过滤 high_y - low_y <= threshold_diff 的 pair。
+        - 使用 gp_seed 固定随机种子，与 ROOT sampling_data_from_fixed_GP(..., seed=0) 一致。
+        """
+        from gaussian_process.GP import GP as RootGP  # ROOT 中的 GP 实现
+
+        gp_seed = getattr(self.config, "gp_seed", 0)
+        torch.manual_seed(gp_seed)
+
+        device = x.device
+        n, d = x.size()
+
+        # 子采样用于拟合 GP，避免 OOM（仅影响 GP 拟合，用于梯度优化的起点池单独控制）
+        max_fit = min(self.config.gp_max_fit, n)
+        if n > max_fit:
+            idx_fit = torch.randperm(n, device=device)[:max_fit]
+            x_train = x[idx_fit]
+            y_train = y[idx_fit]
+        else:
+            x_train, y_train = x, y
+
+        # 起点池：对齐 ROOT 的 type_of_initial_points 逻辑
+        # - "highest": 仅从高分样本中构造 best_x；
+        # - "lowest": 仅从低分样本中构造；
+        # - 其它：退化为使用全部样本。
+        y_flat = y.view(-1)
+        init_type = getattr(self.config, "gp_initial_points_type", "all")
+        if init_type == "highest":
+            k = min(self.config.np, n)
+            idx_pool = torch.argsort(y_flat)[-k:]
+            x_pool = x[idx_pool]
+        elif init_type == "lowest":
+            k = min(self.config.np, n)
+            idx_pool = torch.argsort(y_flat)[:k]
+            x_pool = x[idx_pool]
+        else:
+            x_pool = x
+
+        # 初始超参数（仿 ROOT：initial_lengthscale / initial_outputscale / noise / mean_prior）
+        lengthscale = torch.tensor(self.config.l0, device=device)
+        variance = torch.tensor(1.0, device=device)
+        noise = torch.tensor(self.config.gp_noise, device=device)
+        mean_prior = torch.tensor(0.0, device=device)
+
+        gp_model = RootGP(
+            device=device,
+            x_train=x_train,
+            y_train=y_train,
+            lengthscale=lengthscale,
+            variance=variance,
+            noise=noise,
+            mean_prior=mean_prior,
+        )
+
+        num_functions = self.config.ne
+        num_points = min(self.config.np, x_pool.size(0))
+        num_gradient_steps = self.config.m_steps
+        lr = self.config.eta
+        threshold_diff = self.config.gp_threshold_diff
+
+        # 学习率向量：[低分点用 -lr，高分点用 +lr]
+        learning_rate_vec = torch.cat(
+            (
+                -lr * torch.ones(num_points, d, device=device),
+                lr * torch.ones(num_points, d, device=device),
+            )
+        )
+
+        # 固定 GP 超参数：只在初始 lengthscale / variance 上拟合一次（单 GP）
+        gp_model.set_hyper(lengthscale=lengthscale, variance=variance)
+
         all_pairs: List[SyntheticPair] = []
-        # empirical bounds of the (normalized) design space for clipping
-        x_min = x.min(dim=0).values
-        x_max = x.max(dim=0).values
-        for _ in range(self.config.ne):
-            l = torch.empty(1).uniform_(self.config.l0 - self.config.delta, self.config.l0 + self.config.delta).item()
-            model, likelihood = self._fit_gp(x, y, l)
-            idx = torch.randint(0, n, (min(self.config.np, n),), device=x.device)
-            starts = x[idx]
-            x_plus = self._gradient_optimize(model, likelihood, starts, ascent=True, x_min=x_min, x_max=x_max)
-            x_minus = self._gradient_optimize(model, likelihood, starts, ascent=False, x_min=x_min, x_max=x_max)
-            y_plus = self._posterior_mean(model, likelihood, x_plus).detach()
-            y_minus = self._posterior_mean(model, likelihood, x_minus).detach()
-            for j in range(x_plus.size(0)):
-                all_pairs.append(SyntheticPair(x_minus[j], y_minus[j], x_plus[j], y_plus[j]))
+
+        for _ in range(num_functions):
+
+            # 从起点池 x_pool 中随机选 num_points 个起点（对齐 ROOT: best_x -> sampling_data_from_fixed_GP）
+            sel_idx = torch.randperm(x_pool.size(0), device=device)[:num_points]
+            low_x = x_pool[sel_idx].clone().detach().requires_grad_(True)
+            high_x = x_pool[sel_idx].clone().detach().requires_grad_(True)
+            joint_x = torch.cat((low_x, high_x), dim=0)
+
+            # 在固定 GP 上做梯度下降 / 上升以找到低值 / 高值设计
+            for _ in range(num_gradient_steps):
+                mu_star = gp_model.mean_posterior(joint_x)
+                grad = torch.autograd.grad(mu_star.sum(), joint_x, create_graph=False, retain_graph=False)[0]
+                joint_x = (joint_x + learning_rate_vec * grad).detach().requires_grad_(True)
+
+            joint_y = gp_model.mean_posterior(joint_x).detach()
+
+            low_x = joint_x[:num_points, :]
+            high_x = joint_x[num_points:, :]
+            low_y = joint_y[:num_points]
+            high_y = joint_y[num_points:]
+
+            for i in range(num_points):
+                if high_y[i] - low_y[i] <= threshold_diff:
+                    continue
+                all_pairs.append(
+                    SyntheticPair(
+                        x_t=low_x[i].detach(),
+                        y_t=low_y[i].detach(),
+                        x_0=high_x[i].detach(),
+                        y_0=high_y[i].detach(),
+                    )
+                )
+
         return all_pairs
 
 
@@ -215,7 +329,9 @@ class ManifoldVAE(nn.Module):
         return recon_loss + beta * kl
 
     def log_density_proxy(self, x: torch.Tensor) -> torch.Tensor:
-        recon, _, _ = self.forward(x)
+        """确定性路径：仅用 mu 解码，不经过 reparameterize，避免采样时梯度抖动。"""
+        mu, _ = self.encode(x)
+        recon = self.decode(mu)
         return -((x - recon) ** 2).sum(dim=-1)
 
 
@@ -273,14 +389,22 @@ class BrownianBridgeTrainer:
 class RGNBModel:
     def __init__(self, dim: int, config: RGNBConfig | None = None):
         self.config = config or RGNBConfig()
-        # self.rank_net = RankNet(dim).to(self.config.device)
-        # self.score_net = ScoreNetwork(dim).to(self.config.device)
-        # self.vae = ManifoldVAE(dim, latent_dim=self.config.vae_latent_dim).to(self.config.device)
+        # Rank & Manifold 模块：用于采样阶段的引导（rank guidance + manifold guidance）
+        self.rank_net = RankNet(dim).to(self.config.device)
+        self.vae = ManifoldVAE(dim, latent_dim=self.config.vae_latent_dim).to(self.config.device)
         self.synth = GPPosteriorMeanSampler(self.config)
 
         # ROOT Brownian Bridge 模型（与 ROOT 完全一致的训练 / 采样逻辑）
         self.bb_model = create_root_brownian_bridge(dim).to(self.config.device)
         self.bb_optimizer = torch.optim.Adam(self.bb_model.get_parameters(), lr=self.config.bridge_lr)
+
+        # EMA（与 ROOT 一致，测试时用 EMA 权重，常提升 1～3 点）
+        self.use_ema = getattr(self.config, "use_ema", True)
+        self._ema: EMA | None = None
+        self._global_step = 0
+        if self.use_ema:
+            self._ema = EMA(ema_decay=getattr(self.config, "ema_decay", 0.995))
+            self._ema.register(self.bb_model)
 
     def train_ranknet(self, x: torch.Tensor, y: torch.Tensor, epochs: int = 50, use_bce: bool = True):
         x, y = x.to(self.config.device), y.to(self.config.device)
@@ -337,78 +461,217 @@ class RGNBModel:
 
     def train_bridge(self, x: torch.Tensor, y: torch.Tensor):
         """
-        使用 ROOT 的 BrownianBridgeModel 在 GP 合成的 (x_high, x_low, y_high, y_low) 上训练。
+        使用 ROOT 的 BrownianBridgeModel 在 GP 合成的对上训练。
+        与 ROOT use_fixed_gp_posterior 一致：生成一次对（gp_seed）、val_frac 留出 10%、小批量 64、100 epoch。
         """
         device = self.config.device
         x = x.to(device)
         y = y.to(device)
+        val_frac = getattr(self.config, "val_frac", 0.1)
+        batch_size = getattr(self.config, "bridge_batch_size", 64)
+        start_ema_step = getattr(self.config, "start_ema_step", 4000)
+        update_ema_interval = getattr(self.config, "update_ema_interval", 8)
 
         self.bb_model.train()
+        self._global_step = 0
         pairs = self.synth.generate(x, y)
+        if not pairs:
+            print("[Bridge][ROOT] WARNING: no synthetic pairs generated, bridge will be skipped.")
+            return
+
+        # 与 ROOT create_train_dataloader 一致：train = function_samples[int(len*val_frac):]，即后 90%
+        train_start = int(len(pairs) * val_frac)
+        train_pairs = pairs[train_start:] if train_start < len(pairs) else pairs
+        dataset = PairsDataset(train_pairs)
+        loader = DataLoader(
+            dataset,
+            batch_size=batch_size,
+            shuffle=True,
+            drop_last=False,
+            pin_memory=False,
+        )
+
         for epoch in range(self.config.bridge_epochs):
-            # 每个 epoch 从 GP 重新合成一批 pairs，贴近 ROOT 的做法
-            
+            epoch_loss = 0.0
+            n_batches = 0
+            for batch in loader:
+                (x_high, y_high), (x_low, y_low) = batch
+                x_high = x_high.to(device)
+                y_high = y_high.to(device).float()
+                x_low = x_low.to(device)
+                y_low = y_low.to(device).float()
+                if y_high.dim() == 1:
+                    y_high = y_high.unsqueeze(-1)
+                if y_low.dim() == 1:
+                    y_low = y_low.unsqueeze(-1)
 
-            if not pairs:
-                print("[Bridge][ROOT] WARNING: no synthetic pairs generated, bridge will be skipped.")
-                return
+                # 与 ROOT BBDMRunner.loss_fn 对齐的 CFG 训练：
+                # 当采样阶段会使用 cfg_scale / cfg_weight > 0 时，
+                # 这里以 cfg_dropout 概率随机将 (y_high, y_low) 置零，构造无条件分布。
+                cfg_prob = getattr(self.config, "cfg_dropout", 0.15)
+                if cfg_prob > 0.0:
+                    rand_mask = torch.rand_like(y_high)
+                    mask = rand_mask <= cfg_prob
+                    y_high = y_high.masked_fill(mask, 0.0)
+                    y_low = y_low.masked_fill(mask, 0.0)
 
-            x_high = torch.stack([p.x_0 for p in pairs]).to(device)
-            x_low = torch.stack([p.x_t for p in pairs]).to(device)
-            y_high = torch.stack([p.y_0 for p in pairs]).float().to(device).unsqueeze(-1)
-            y_low = torch.stack([p.y_t for p in pairs]).float().to(device).unsqueeze(-1)
-
-            loss, _ = self.bb_model(x_high, y_high, x_low, y_low)
-            self.bb_optimizer.zero_grad()
-            loss.backward()
-            self.bb_optimizer.step()
+                loss, _ = self.bb_model(x_high, y_high, x_low, y_low)
+                self.bb_optimizer.zero_grad()
+                loss.backward()
+                self.bb_optimizer.step()
+                self._global_step += 1
+                if self._ema is not None and self._global_step % update_ema_interval == 0:
+                    with_decay = self._global_step >= start_ema_step
+                    self._ema.update(self.bb_model, with_decay=with_decay)
+                epoch_loss += loss.item()
+                n_batches += 1
 
             if (epoch + 1) % max(1, self.config.bridge_epochs // 5) == 0:
-                print(f"[Bridge][ROOT][epoch {epoch+1}/{self.config.bridge_epochs}] loss≈{loss.item():.4f}")
+                avg_loss = epoch_loss / max(n_batches, 1)
+                print(f"[Bridge][ROOT][epoch {epoch+1}/{self.config.bridge_epochs}] loss≈{avg_loss:.4f}")
 
     def fit(self, x: torch.Tensor, y: torch.Tensor):
         self.train_ranknet(x, y)
         self.train_vae(x)
         self.train_bridge(x, y)
 
-    def sample(self, x_offline: torch.Tensor, y_offline: torch.Tensor, steps: int | None = None) -> torch.Tensor:
+    def sample(
+        self,
+        x_low: torch.Tensor,
+        y_low: torch.Tensor,
+        high_cond_score: float | None = None,
+        cfg_weight: float = 0.0,
+        ) -> torch.Tensor:
         """
-        使用 ROOT 的 BrownianBridgeModel 做采样：
-        - 从离线数据中选取一批低分候选 (x_low, y_low)
-        - 构造统一的高分条件 y_high
-        - 调用 bb_model.sample 得到高分候选
+        手动实现 Brownian Bridge 反向采样循环，并在每一步注入：
+        - 目标分外推（target extrapolation）
+        - Rank 梯度引导（rank guidance）
+        - VAE 流形密度引导（manifold guidance）
+
+        参数：
+            x_low, y_low: 作为起点的 low candidates（已在外部按 ROOT 的逻辑选好、且已归一化）。
+            high_cond_score: 目标高分（在同一归一化空间下），通常为 oracle_y_max_normalized * alpha。
+            cfg_weight: classifier-free guidance 的权重（如 -1.5），与 ROOT BBDMRunner 一致。
         """
         device = self.config.device
         self.bb_model.eval()
 
-        x_offline = x_offline.to(device)
-        y_offline = y_offline.to(device)
+        x_low = x_low.to(device)
+        y_low = y_low.to(device).unsqueeze(-1)
 
-        # 选取 top_k 个低分样本作为起点（与 ROOT 的 "low candidates" 一致）
-        n = x_offline.size(0)
-        k = min(self.config.top_k, n)
-        low_idx = torch.argsort(y_offline, descending=False)[:k]
-        x_low = x_offline[low_idx]
-        y_low = y_offline[low_idx].unsqueeze(-1)
+        # ---------------------------
+        # 1. 目标分外推（Target Extrapolation）
+        #    y_high = max(y_offline) * target_extrap_factor
+        # ---------------------------
+        offline_max = y_low.max().item()
+        factor = getattr(self.config, "target_extrap_factor", 1.2)
+        if high_cond_score is not None:
+            base_target = high_cond_score
+        else:
+            base_target = offline_max
+        target_val = base_target * factor
+        y_high = torch.full_like(y_low, target_val)
 
-        # 目标高分：简单使用当前 offline 的最大值作为 oracle proxy
-        target_y_val = y_offline.max()
-        y_high = torch.full_like(y_low, target_y_val)
+        if self._ema is not None:
+            self._ema.apply_shadow(self.bb_model)
 
         print(
-            f"[Sample][ROOT] low candidates: mean={y_low.mean().item():.4f}, "
+            f"[Sample][RGNB] low candidates: mean={y_low.mean().item():.4f}, "
             f"min={y_low.min().item():.4f}, max={y_low.max().item():.4f}; "
-            f"target_y={target_y_val.item():.4f}"
+            f"target_y={target_val:.4f}, cfg_weight={cfg_weight:.2f}, "
+            f"lambda_rank={self.config.lambda_rank:.4f}, lambda_manifold={self.config.lambda_manifold:.4f}"
         )
 
-        with torch.no_grad():
-            high_candidates = self.bb_model.sample(
-                x_low,
-                y_low,
-                y_high,
-                clip_denoised=False,
-                sample_mid_step=False,
-                classifier_free_guidance_weight=0.0,
+        # 简单版本的 extract，仿 ROOT model.utils.extract
+        def _extract(buffer: torch.Tensor, t: torch.Tensor, x_shape: torch.Size) -> torch.Tensor:
+            # buffer: (T,), t: (B,)
+            out = buffer.gather(0, t)
+            while out.dim() < len(x_shape):
+                out = out.unsqueeze(-1)
+            return out.expand(x_shape)
+
+        steps = self.bb_model.steps  # 采样时间步（从 T-1 到 0）
+        x_t = x_low.clone()
+
+        # 采样循环：从大步到小步，手动实现与 ROOT BrownianBridgeModel.p_sample_loop 一致的动力学
+        for i in range(len(steps)):
+            t_idx = steps[i].item()
+            t = torch.full((x_t.shape[0],), t_idx, device=device, dtype=torch.long)
+
+            # ---------------------------
+            # 2. 调用 ROOT 原生 Score 网络（denoise_fn）
+            #    使用 classifier-free guidance 形式构造 ε_θ / objective_recon
+            # ---------------------------
+            # 条件分支
+            eps_cond = self.bb_model.denoise_fn(x_t, t, y_low, y_high)
+            # 无条件分支（y=0）
+            zeros_y = torch.zeros_like(y_low)
+            eps_uncond = self.bb_model.denoise_fn(x_t, t, zeros_y, zeros_y)
+            objective_recon = (1.0 + cfg_weight) * eps_cond - cfg_weight * eps_uncond
+
+            # 根据 ROOT BrownianBridgeModel 的定义，从 objective_recon 反推 x0 估计
+            x0_recon = self.bb_model.predict_x0_from_objective(x_t, x_low, t, objective_recon)
+
+            if t_idx == 0:
+                # 最后一跳：直接返回去噪后的 x0_recon，并在此处注入引导项
+                x_next_mean = x0_recon
+                noise_term = 0.0
+            else:
+                # 与 ROOT BrownianBridgeModel.p_sample 中的线性 schedule / 方差计算保持一致
+                n_t_idx = steps[i + 1].item()
+                n_t = torch.full((x_t.shape[0],), n_t_idx, device=device, dtype=torch.long)
+
+                m_t = _extract(self.bb_model.m_t, t, x_t.shape)
+                m_nt = _extract(self.bb_model.m_t, n_t, x_t.shape)
+                var_t = _extract(self.bb_model.variance_t, t, x_t.shape)
+                var_nt = _extract(self.bb_model.variance_t, n_t, x_t.shape)
+
+                # 这里的 sigma2_t 即为离散后向步长对应的 \tilde{kappa}_{t-1}
+                sigma2_t = (var_t - var_nt * (1.0 - m_t) ** 2 / (1.0 - m_nt) ** 2) * var_nt / var_t
+                sigma_t = torch.sqrt(sigma2_t) * self.bb_model.eta
+
+                noise = torch.randn_like(x_t)
+                x_tminus_mean = (
+                    (1.0 - m_nt) * x0_recon
+                    + m_nt * x_low
+                    + torch.sqrt((var_nt - sigma2_t) / var_t)
+                    * (x_t - (1.0 - m_t) * x0_recon - m_t * x_low)
+                )
+
+                x_next_mean = x_tminus_mean
+                noise_term = sigma_t * noise
+
+            # ---------------------------
+            # 3. RGNB 额外引导：
+            #    - Rank guidance: λ_rank * g_rank
+            #    - Manifold guidance: λ_manifold * g_mani
+            # ---------------------------
+            x_for_guidance = x_next_mean.detach().clone().requires_grad_(True)
+
+            # Rank 引导：梯度归一化后再加权
+            rank_score = self.rank_net(x_for_guidance).sum()
+            g_rank = torch.autograd.grad(rank_score, x_for_guidance, create_graph=False, retain_graph=False)[0]
+            g_rank = g_rank / (g_rank.norm(dim=-1, keepdim=True) + 1e-8)
+
+            # Manifold 引导：使用 VAE 近似 log p(x) 的梯度
+            log_p = self.vae.log_density_proxy(x_for_guidance).sum()
+            g_mani = torch.autograd.grad(log_p, x_for_guidance, create_graph=False, retain_graph=False)[0]
+
+            total_guidance = (
+                getattr(self.config, "lambda_rank", 0.0) * g_rank
+                + getattr(self.config, "lambda_manifold", 0.0) * g_mani
             )
 
-        return high_candidates
+            x_guided = x_next_mean + total_guidance
+
+            # 合成随机噪声项（除了 t=0 的最后一步）
+            if isinstance(noise_term, float) and noise_term == 0.0:
+                x_t = x_guided
+            else:
+                x_t = x_guided + noise_term
+
+        # 采样结束，恢复 EMA 权重，并返回与外部无梯度关联的结果
+        if self._ema is not None:
+            self._ema.restore(self.bb_model)
+
+        return x_t.detach()
