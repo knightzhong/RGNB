@@ -24,5 +24,18 @@ rgnb:
   vae_latent_dim: 16
 
 training:
-  ranknet_epochs: 50
+  # ListNet 代理模型（RankNet）训练轮数
+  ranknet_epochs: 200
+  # Manifold VAE 训练轮数
   vae_epochs: 50
+  # Listwise 数据增强超参：每个 list 的长度 m
+  list_size: 1000
+  # 构造的 list 总数 n
+  num_lists: 10000
+  # Listwise DataLoader 的 batch_size
+  listwise_batch_size: 8
+  # 采样时是否允许有放回
+  listwise_replacement: true
+  # ListNet 训练的学习率与正则
+  ranknet_lr: 3.0e-4
+  ranknet_weight_decay: 1.0e-5

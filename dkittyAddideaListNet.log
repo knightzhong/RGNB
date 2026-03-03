@@ -1,0 +1,1366 @@
+nohup: 忽略输入
+============================================================
+[RGNB] 开始训练
+  任务: DKittyMorphology-Exact-v0
+  设备: cuda:0
+============================================================
+[RGNB] 训练 RankNet...
+[ListNet][epoch 1/200] step 200/1250 loss≈6.7556
+[ListNet][epoch 1/200] step 400/1250 loss≈6.7468
+[ListNet][epoch 1/200] step 600/1250 loss≈6.7406
+[ListNet][epoch 1/200] step 800/1250 loss≈6.7355
+[ListNet][epoch 1/200] step 1000/1250 loss≈6.7313
+[ListNet][epoch 1/200] step 1200/1250 loss≈6.7280
+[ListNet][epoch 2/200] step 200/1250 loss≈6.7084
+[ListNet][epoch 2/200] step 400/1250 loss≈6.7077
+[ListNet][epoch 2/200] step 600/1250 loss≈6.7069
+[ListNet][epoch 2/200] step 800/1250 loss≈6.7065
+[ListNet][epoch 2/200] step 1000/1250 loss≈6.7060
+[ListNet][epoch 2/200] step 1200/1250 loss≈6.7057
+[ListNet][epoch 3/200] step 200/1250 loss≈6.7029
+[ListNet][epoch 3/200] step 400/1250 loss≈6.7029
+[ListNet][epoch 3/200] step 600/1250 loss≈6.7026
+[ListNet][epoch 3/200] step 800/1250 loss≈6.7025
+[ListNet][epoch 3/200] step 1000/1250 loss≈6.7024
+[ListNet][epoch 3/200] step 1200/1250 loss≈6.7022
+[ListNet][epoch 4/200] step 200/1250 loss≈6.7012
+[ListNet][epoch 4/200] step 400/1250 loss≈6.7011
+[ListNet][epoch 4/200] step 600/1250 loss≈6.7012
+[ListNet][epoch 4/200] step 800/1250 loss≈6.7010
+[ListNet][epoch 4/200] step 1000/1250 loss≈6.7011
+[ListNet][epoch 4/200] step 1200/1250 loss≈6.7010
+[ListNet][epoch 5/200] step 200/1250 loss≈6.7006
+[ListNet][epoch 5/200] step 400/1250 loss≈6.7004
+[ListNet][epoch 5/200] step 600/1250 loss≈6.7005
+[ListNet][epoch 5/200] step 800/1250 loss≈6.7005
+[ListNet][epoch 5/200] step 1000/1250 loss≈6.7005
+[ListNet][epoch 5/200] step 1200/1250 loss≈6.7005
+[ListNet][epoch 6/200] step 200/1250 loss≈6.7003
+[ListNet][epoch 6/200] step 400/1250 loss≈6.7006
+[ListNet][epoch 6/200] step 600/1250 loss≈6.7005
+[ListNet][epoch 6/200] step 800/1250 loss≈6.7004
+[ListNet][epoch 6/200] step 1000/1250 loss≈6.7003
+[ListNet][epoch 6/200] step 1200/1250 loss≈6.7003
+[ListNet][epoch 7/200] step 200/1250 loss≈6.7001
+[ListNet][epoch 7/200] step 400/1250 loss≈6.7001
+[ListNet][epoch 7/200] step 600/1250 loss≈6.7001
+[ListNet][epoch 7/200] step 800/1250 loss≈6.7001
+[ListNet][epoch 7/200] step 1000/1250 loss≈6.7001
+[ListNet][epoch 7/200] step 1200/1250 loss≈6.7001
+[ListNet][epoch 8/200] step 200/1250 loss≈6.7002
+[ListNet][epoch 8/200] step 400/1250 loss≈6.7003
+[ListNet][epoch 8/200] step 600/1250 loss≈6.7001
+[ListNet][epoch 8/200] step 800/1250 loss≈6.7001
+[ListNet][epoch 8/200] step 1000/1250 loss≈6.7001
+[ListNet][epoch 8/200] step 1200/1250 loss≈6.7001
+[ListNet][epoch 9/200] step 200/1250 loss≈6.7005
+[ListNet][epoch 9/200] step 400/1250 loss≈6.7001
+[ListNet][epoch 9/200] step 600/1250 loss≈6.7002
+[ListNet][epoch 9/200] step 800/1250 loss≈6.7001
+[ListNet][epoch 9/200] step 1000/1250 loss≈6.7001
+[ListNet][epoch 9/200] step 1200/1250 loss≈6.7001
+[ListNet][epoch 10/200] step 200/1250 loss≈6.7003
+[ListNet][epoch 10/200] step 400/1250 loss≈6.7000
+[ListNet][epoch 10/200] step 600/1250 loss≈6.7002
+[ListNet][epoch 10/200] step 800/1250 loss≈6.7001
+[ListNet][epoch 10/200] step 1000/1250 loss≈6.7001
+[ListNet][epoch 10/200] step 1200/1250 loss≈6.7001
+[ListNet][epoch 11/200] step 200/1250 loss≈6.6998
+[ListNet][epoch 11/200] step 400/1250 loss≈6.6999
+[ListNet][epoch 11/200] step 600/1250 loss≈6.7000
+[ListNet][epoch 11/200] step 800/1250 loss≈6.6999
+[ListNet][epoch 11/200] step 1000/1250 loss≈6.7002
+[ListNet][epoch 11/200] step 1200/1250 loss≈6.7002
+[ListNet][epoch 12/200] step 200/1250 loss≈6.6997
+[ListNet][epoch 12/200] step 400/1250 loss≈6.7001
+[ListNet][epoch 12/200] step 600/1250 loss≈6.7001
+[ListNet][epoch 12/200] step 800/1250 loss≈6.7000
+[ListNet][epoch 12/200] step 1000/1250 loss≈6.6999
+[ListNet][epoch 12/200] step 1200/1250 loss≈6.6999
+[ListNet][epoch 13/200] step 200/1250 loss≈6.7004
+[ListNet][epoch 13/200] step 400/1250 loss≈6.7002
+[ListNet][epoch 13/200] step 600/1250 loss≈6.7001
+[ListNet][epoch 13/200] step 800/1250 loss≈6.7004
+[ListNet][epoch 13/200] step 1000/1250 loss≈6.7002
+[ListNet][epoch 13/200] step 1200/1250 loss≈6.7001
+[ListNet][epoch 14/200] step 200/1250 loss≈6.6999
+[ListNet][epoch 14/200] step 400/1250 loss≈6.6999
+[ListNet][epoch 14/200] step 600/1250 loss≈6.6999
+[ListNet][epoch 14/200] step 800/1250 loss≈6.7003
+[ListNet][epoch 14/200] step 1000/1250 loss≈6.7001
+[ListNet][epoch 14/200] step 1200/1250 loss≈6.7001
+[ListNet][epoch 15/200] step 200/1250 loss≈6.7000
+[ListNet][epoch 15/200] step 400/1250 loss≈6.7000
+[ListNet][epoch 15/200] step 600/1250 loss≈6.7000
+[ListNet][epoch 15/200] step 800/1250 loss≈6.7003
+[ListNet][epoch 15/200] step 1000/1250 loss≈6.7001
+[ListNet][epoch 15/200] step 1200/1250 loss≈6.7000
+[ListNet][epoch 16/200] step 200/1250 loss≈6.6997
+[ListNet][epoch 16/200] step 400/1250 loss≈6.6997
+[ListNet][epoch 16/200] step 600/1250 loss≈6.6998
+[ListNet][epoch 16/200] step 800/1250 loss≈6.6999
+[ListNet][epoch 16/200] step 1000/1250 loss≈6.6999
+[ListNet][epoch 16/200] step 1200/1250 loss≈6.7001
+[ListNet][epoch 17/200] step 200/1250 loss≈6.6995
+[ListNet][epoch 17/200] step 400/1250 loss≈6.6997
+[ListNet][epoch 17/200] step 600/1250 loss≈6.6999
+[ListNet][epoch 17/200] step 800/1250 loss≈6.6998
+[ListNet][epoch 17/200] step 1000/1250 loss≈6.7001
+[ListNet][epoch 17/200] step 1200/1250 loss≈6.7002
+[ListNet][epoch 18/200] step 200/1250 loss≈6.6995
+[ListNet][epoch 18/200] step 400/1250 loss≈6.6996
+[ListNet][epoch 18/200] step 600/1250 loss≈6.6997
+[ListNet][epoch 18/200] step 800/1250 loss≈6.6998
+[ListNet][epoch 18/200] step 1000/1250 loss≈6.6999
+[ListNet][epoch 18/200] step 1200/1250 loss≈6.6999
+[ListNet][epoch 19/200] step 200/1250 loss≈6.7000
+[ListNet][epoch 19/200] step 400/1250 loss≈6.6999
+[ListNet][epoch 19/200] step 600/1250 loss≈6.7006
+[ListNet][epoch 19/200] step 800/1250 loss≈6.7004
+[ListNet][epoch 19/200] step 1000/1250 loss≈6.7002
+[ListNet][epoch 19/200] step 1200/1250 loss≈6.7002
+[ListNet][epoch 20/200] step 200/1250 loss≈6.6997
+[ListNet][epoch 20/200] step 400/1250 loss≈6.7003
+[ListNet][epoch 20/200] step 600/1250 loss≈6.7003
+[ListNet][epoch 20/200] step 800/1250 loss≈6.7001
+[ListNet][epoch 20/200] step 1000/1250 loss≈6.7000
+[ListNet][epoch 20/200] step 1200/1250 loss≈6.7000
+[ListNet][epoch 21/200] step 200/1250 loss≈6.7007
+[ListNet][epoch 21/200] step 400/1250 loss≈6.7006
+[ListNet][epoch 21/200] step 600/1250 loss≈6.7002
+[ListNet][epoch 21/200] step 800/1250 loss≈6.7001
+[ListNet][epoch 21/200] step 1000/1250 loss≈6.7000
+[ListNet][epoch 21/200] step 1200/1250 loss≈6.7004
+[ListNet][epoch 22/200] step 200/1250 loss≈6.6997
+[ListNet][epoch 22/200] step 400/1250 loss≈6.6999
+[ListNet][epoch 22/200] step 600/1250 loss≈6.6998
+[ListNet][epoch 22/200] step 800/1250 loss≈6.6999
+[ListNet][epoch 22/200] step 1000/1250 loss≈6.6998
+[ListNet][epoch 22/200] step 1200/1250 loss≈6.6998
+[ListNet][epoch 23/200] step 200/1250 loss≈6.6999
+[ListNet][epoch 23/200] step 400/1250 loss≈6.7000
+[ListNet][epoch 23/200] step 600/1250 loss≈6.6997
+[ListNet][epoch 23/200] step 800/1250 loss≈6.6997
+[ListNet][epoch 23/200] step 1000/1250 loss≈6.6998
+[ListNet][epoch 23/200] step 1200/1250 loss≈6.6998
+[ListNet][epoch 24/200] step 200/1250 loss≈6.6996
+[ListNet][epoch 24/200] step 400/1250 loss≈6.6996
+[ListNet][epoch 24/200] step 600/1250 loss≈6.7001
+[ListNet][epoch 24/200] step 800/1250 loss≈6.7001
+[ListNet][epoch 24/200] step 1000/1250 loss≈6.7000
+[ListNet][epoch 24/200] step 1200/1250 loss≈6.7002
+[ListNet][epoch 25/200] step 200/1250 loss≈6.6998
+[ListNet][epoch 25/200] step 400/1250 loss≈6.6998
+[ListNet][epoch 25/200] step 600/1250 loss≈6.6999
+[ListNet][epoch 25/200] step 800/1250 loss≈6.6998
+[ListNet][epoch 25/200] step 1000/1250 loss≈6.6999
+[ListNet][epoch 25/200] step 1200/1250 loss≈6.6998
+[ListNet][epoch 26/200] step 200/1250 loss≈6.7000
+[ListNet][epoch 26/200] step 400/1250 loss≈6.6999
+[ListNet][epoch 26/200] step 600/1250 loss≈6.6997
+[ListNet][epoch 26/200] step 800/1250 loss≈6.7007
+[ListNet][epoch 26/200] step 1000/1250 loss≈6.7018
+[ListNet][epoch 26/200] step 1200/1250 loss≈6.7018
+[ListNet][epoch 27/200] step 200/1250 loss≈6.7004
+[ListNet][epoch 27/200] step 400/1250 loss≈6.7005
+[ListNet][epoch 27/200] step 600/1250 loss≈6.7002
+[ListNet][epoch 27/200] step 800/1250 loss≈6.7000
+[ListNet][epoch 27/200] step 1000/1250 loss≈6.7001
+[ListNet][epoch 27/200] step 1200/1250 loss≈6.7001
+[ListNet][epoch 28/200] step 200/1250 loss≈6.6996
+[ListNet][epoch 28/200] step 400/1250 loss≈6.6996
+[ListNet][epoch 28/200] step 600/1250 loss≈6.6996
+[ListNet][epoch 28/200] step 800/1250 loss≈6.6999
+[ListNet][epoch 28/200] step 1000/1250 loss≈6.6999
+[ListNet][epoch 28/200] step 1200/1250 loss≈6.6998
+[ListNet][epoch 29/200] step 200/1250 loss≈6.6999
+[ListNet][epoch 29/200] step 400/1250 loss≈6.6997
+[ListNet][epoch 29/200] step 600/1250 loss≈6.6998
+[ListNet][epoch 29/200] step 800/1250 loss≈6.6999
+[ListNet][epoch 29/200] step 1000/1250 loss≈6.6999
+[ListNet][epoch 29/200] step 1200/1250 loss≈6.6999
+[ListNet][epoch 30/200] step 200/1250 loss≈6.6995
+[ListNet][epoch 30/200] step 400/1250 loss≈6.7001
+[ListNet][epoch 30/200] step 600/1250 loss≈6.7000
+[ListNet][epoch 30/200] step 800/1250 loss≈6.7000
+[ListNet][epoch 30/200] step 1000/1250 loss≈6.7000
+[ListNet][epoch 30/200] step 1200/1250 loss≈6.7000
+[ListNet][epoch 31/200] step 200/1250 loss≈6.6995
+[ListNet][epoch 31/200] step 400/1250 loss≈6.6997
+[ListNet][epoch 31/200] step 600/1250 loss≈6.7000
+[ListNet][epoch 31/200] step 800/1250 loss≈6.7000
+[ListNet][epoch 31/200] step 1000/1250 loss≈6.6999
+[ListNet][epoch 31/200] step 1200/1250 loss≈6.6999
+[ListNet][epoch 32/200] step 200/1250 loss≈6.7003
+[ListNet][epoch 32/200] step 400/1250 loss≈6.6998
+[ListNet][epoch 32/200] step 600/1250 loss≈6.7000
+[ListNet][epoch 32/200] step 800/1250 loss≈6.6999
+[ListNet][epoch 32/200] step 1000/1250 loss≈6.6999
+[ListNet][epoch 32/200] step 1200/1250 loss≈6.6999
+[ListNet][epoch 33/200] step 200/1250 loss≈6.6991
+[ListNet][epoch 33/200] step 400/1250 loss≈6.7002
+[ListNet][epoch 33/200] step 600/1250 loss≈6.7001
+[ListNet][epoch 33/200] step 800/1250 loss≈6.7001
+[ListNet][epoch 33/200] step 1000/1250 loss≈6.7000
+[ListNet][epoch 33/200] step 1200/1250 loss≈6.7000
+[ListNet][epoch 34/200] step 200/1250 loss≈6.7006
+[ListNet][epoch 34/200] step 400/1250 loss≈6.7002
+[ListNet][epoch 34/200] step 600/1250 loss≈6.7000
+[ListNet][epoch 34/200] step 800/1250 loss≈6.7000
+[ListNet][epoch 34/200] step 1000/1250 loss≈6.6999
+[ListNet][epoch 34/200] step 1200/1250 loss≈6.6999
+[ListNet][epoch 35/200] step 200/1250 loss≈6.6996
+[ListNet][epoch 35/200] step 400/1250 loss≈6.6997
+[ListNet][epoch 35/200] step 600/1250 loss≈6.7003
+[ListNet][epoch 35/200] step 800/1250 loss≈6.7001
+[ListNet][epoch 35/200] step 1000/1250 loss≈6.7000
+[ListNet][epoch 35/200] step 1200/1250 loss≈6.7000
+[ListNet][epoch 36/200] step 200/1250 loss≈6.7000
+[ListNet][epoch 36/200] step 400/1250 loss≈6.6998
+[ListNet][epoch 36/200] step 600/1250 loss≈6.6997
+[ListNet][epoch 36/200] step 800/1250 loss≈6.7000
+[ListNet][epoch 36/200] step 1000/1250 loss≈6.6999
+[ListNet][epoch 36/200] step 1200/1250 loss≈6.6998
+[ListNet][epoch 37/200] step 200/1250 loss≈6.7000
+[ListNet][epoch 37/200] step 400/1250 loss≈6.6999
+[ListNet][epoch 37/200] step 600/1250 loss≈6.6998
+[ListNet][epoch 37/200] step 800/1250 loss≈6.6998
+[ListNet][epoch 37/200] step 1000/1250 loss≈6.6998
+[ListNet][epoch 37/200] step 1200/1250 loss≈6.6999
+[ListNet][epoch 38/200] step 200/1250 loss≈6.6994
+[ListNet][epoch 38/200] step 400/1250 loss≈6.6995
+[ListNet][epoch 38/200] step 600/1250 loss≈6.6995
+[ListNet][epoch 38/200] step 800/1250 loss≈6.6996
+[ListNet][epoch 38/200] step 1000/1250 loss≈6.6997
+[ListNet][epoch 38/200] step 1200/1250 loss≈6.6998
+[ListNet][epoch 39/200] step 200/1250 loss≈6.7014
+[ListNet][epoch 39/200] step 400/1250 loss≈6.7005
+[ListNet][epoch 39/200] step 600/1250 loss≈6.7003
+[ListNet][epoch 39/200] step 800/1250 loss≈6.7003
+[ListNet][epoch 39/200] step 1000/1250 loss≈6.7001
+[ListNet][epoch 39/200] step 1200/1250 loss≈6.7001
+[ListNet][epoch 40/200] step 200/1250 loss≈6.7006
+[ListNet][epoch 40/200] step 400/1250 loss≈6.7001
+[ListNet][epoch 40/200] step 600/1250 loss≈6.7000
+[ListNet][epoch 40/200] step 800/1250 loss≈6.6999
+[ListNet][epoch 40/200] step 1000/1250 loss≈6.6999
+[ListNet][epoch 40/200] step 1200/1250 loss≈6.6998
+[ListNet][epoch 40/200] loss≈6.6999
+[ListNet][epoch 41/200] step 200/1250 loss≈6.6997
+[ListNet][epoch 41/200] step 400/1250 loss≈6.7014
+[ListNet][epoch 41/200] step 600/1250 loss≈6.7021
+[ListNet][epoch 41/200] step 800/1250 loss≈6.7016
+[ListNet][epoch 41/200] step 1000/1250 loss≈6.7012
+[ListNet][epoch 41/200] step 1200/1250 loss≈6.7009
+[ListNet][epoch 42/200] step 200/1250 loss≈6.7004
+[ListNet][epoch 42/200] step 400/1250 loss≈6.7000
+[ListNet][epoch 42/200] step 600/1250 loss≈6.6998
+[ListNet][epoch 42/200] step 800/1250 loss≈6.6998
+[ListNet][epoch 42/200] step 1000/1250 loss≈6.7000
+[ListNet][epoch 42/200] step 1200/1250 loss≈6.6999
+[ListNet][epoch 43/200] step 200/1250 loss≈6.6997
+[ListNet][epoch 43/200] step 400/1250 loss≈6.6997
+[ListNet][epoch 43/200] step 600/1250 loss≈6.6999
+[ListNet][epoch 43/200] step 800/1250 loss≈6.6998
+[ListNet][epoch 43/200] step 1000/1250 loss≈6.6998
+[ListNet][epoch 43/200] step 1200/1250 loss≈6.6998
+[ListNet][epoch 44/200] step 200/1250 loss≈6.6995
+[ListNet][epoch 44/200] step 400/1250 loss≈6.6998
+[ListNet][epoch 44/200] step 600/1250 loss≈6.7002
+[ListNet][epoch 44/200] step 800/1250 loss≈6.7000
+[ListNet][epoch 44/200] step 1000/1250 loss≈6.7000
+[ListNet][epoch 44/200] step 1200/1250 loss≈6.6999
+[ListNet][epoch 45/200] step 200/1250 loss≈6.7000
+[ListNet][epoch 45/200] step 400/1250 loss≈6.7007
+[ListNet][epoch 45/200] step 600/1250 loss≈6.7005
+[ListNet][epoch 45/200] step 800/1250 loss≈6.7002
+[ListNet][epoch 45/200] step 1000/1250 loss≈6.7001
+[ListNet][epoch 45/200] step 1200/1250 loss≈6.7000
+[ListNet][epoch 46/200] step 200/1250 loss≈6.6995
+[ListNet][epoch 46/200] step 400/1250 loss≈6.7002
+[ListNet][epoch 46/200] step 600/1250 loss≈6.7000
+[ListNet][epoch 46/200] step 800/1250 loss≈6.7003
+[ListNet][epoch 46/200] step 1000/1250 loss≈6.7006
+[ListNet][epoch 46/200] step 1200/1250 loss≈6.7004
+[ListNet][epoch 47/200] step 200/1250 loss≈6.7003
+[ListNet][epoch 47/200] step 400/1250 loss≈6.7005
+[ListNet][epoch 47/200] step 600/1250 loss≈6.7002
+[ListNet][epoch 47/200] step 800/1250 loss≈6.7000
+[ListNet][epoch 47/200] step 1000/1250 loss≈6.6999
+[ListNet][epoch 47/200] step 1200/1250 loss≈6.7000
+[ListNet][epoch 48/200] step 200/1250 loss≈6.6994
+[ListNet][epoch 48/200] step 400/1250 loss≈6.6995
+[ListNet][epoch 48/200] step 600/1250 loss≈6.6998
+[ListNet][epoch 48/200] step 800/1250 loss≈6.6997
+[ListNet][epoch 48/200] step 1000/1250 loss≈6.6999
+[ListNet][epoch 48/200] step 1200/1250 loss≈6.6998
+[ListNet][epoch 49/200] step 200/1250 loss≈6.7001
+[ListNet][epoch 49/200] step 400/1250 loss≈6.7002
+[ListNet][epoch 49/200] step 600/1250 loss≈6.7000
+[ListNet][epoch 49/200] step 800/1250 loss≈6.7000
+[ListNet][epoch 49/200] step 1000/1250 loss≈6.6999
+[ListNet][epoch 49/200] step 1200/1250 loss≈6.7001
+[ListNet][epoch 50/200] step 200/1250 loss≈6.6995
+[ListNet][epoch 50/200] step 400/1250 loss≈6.6995
+[ListNet][epoch 50/200] step 600/1250 loss≈6.6999
+[ListNet][epoch 50/200] step 800/1250 loss≈6.6999
+[ListNet][epoch 50/200] step 1000/1250 loss≈6.6999
+[ListNet][epoch 50/200] step 1200/1250 loss≈6.6999
+[ListNet][epoch 51/200] step 200/1250 loss≈6.7011
+[ListNet][epoch 51/200] step 400/1250 loss≈6.7002
+[ListNet][epoch 51/200] step 600/1250 loss≈6.7000
+[ListNet][epoch 51/200] step 800/1250 loss≈6.7000
+[ListNet][epoch 51/200] step 1000/1250 loss≈6.7000
+[ListNet][epoch 51/200] step 1200/1250 loss≈6.6999
+[ListNet][epoch 52/200] step 200/1250 loss≈6.6994
+[ListNet][epoch 52/200] step 400/1250 loss≈6.6997
+[ListNet][epoch 52/200] step 600/1250 loss≈6.6996
+[ListNet][epoch 52/200] step 800/1250 loss≈6.7005
+[ListNet][epoch 52/200] step 1000/1250 loss≈6.7003
+[ListNet][epoch 52/200] step 1200/1250 loss≈6.7002
+[ListNet][epoch 53/200] step 200/1250 loss≈6.6997
+[ListNet][epoch 53/200] step 400/1250 loss≈6.6995
+[ListNet][epoch 53/200] step 600/1250 loss≈6.6999
+[ListNet][epoch 53/200] step 800/1250 loss≈6.6998
+[ListNet][epoch 53/200] step 1000/1250 loss≈6.6999
+[ListNet][epoch 53/200] step 1200/1250 loss≈6.6998
+[ListNet][epoch 54/200] step 200/1250 loss≈6.7004
+[ListNet][epoch 54/200] step 400/1250 loss≈6.6999
+[ListNet][epoch 54/200] step 600/1250 loss≈6.6998
+[ListNet][epoch 54/200] step 800/1250 loss≈6.7000
+[ListNet][epoch 54/200] step 1000/1250 loss≈6.6999
+[ListNet][epoch 54/200] step 1200/1250 loss≈6.6999
+[ListNet][epoch 55/200] step 200/1250 loss≈6.6997
+[ListNet][epoch 55/200] step 400/1250 loss≈6.7001
+[ListNet][epoch 55/200] step 600/1250 loss≈6.7000
+[ListNet][epoch 55/200] step 800/1250 loss≈6.7000
+[ListNet][epoch 55/200] step 1000/1250 loss≈6.7000
+[ListNet][epoch 55/200] step 1200/1250 loss≈6.6999
+[ListNet][epoch 56/200] step 200/1250 loss≈6.6995
+[ListNet][epoch 56/200] step 400/1250 loss≈6.6996
+[ListNet][epoch 56/200] step 600/1250 loss≈6.6997
+[ListNet][epoch 56/200] step 800/1250 loss≈6.6997
+[ListNet][epoch 56/200] step 1000/1250 loss≈6.6998
+[ListNet][epoch 56/200] step 1200/1250 loss≈6.6997
+[ListNet][epoch 57/200] step 200/1250 loss≈6.7005
+[ListNet][epoch 57/200] step 400/1250 loss≈6.7000
+[ListNet][epoch 57/200] step 600/1250 loss≈6.6999
+[ListNet][epoch 57/200] step 800/1250 loss≈6.7004
+[ListNet][epoch 57/200] step 1000/1250 loss≈6.7004
+[ListNet][epoch 57/200] step 1200/1250 loss≈6.7003
+[ListNet][epoch 58/200] step 200/1250 loss≈6.6995
+[ListNet][epoch 58/200] step 400/1250 loss≈6.6998
+[ListNet][epoch 58/200] step 600/1250 loss≈6.6999
+[ListNet][epoch 58/200] step 800/1250 loss≈6.6999
+[ListNet][epoch 58/200] step 1000/1250 loss≈6.6998
+[ListNet][epoch 58/200] step 1200/1250 loss≈6.6998
+[ListNet][epoch 59/200] step 200/1250 loss≈6.6998
+[ListNet][epoch 59/200] step 400/1250 loss≈6.7009
+[ListNet][epoch 59/200] step 600/1250 loss≈6.7005
+[ListNet][epoch 59/200] step 800/1250 loss≈6.7003
+[ListNet][epoch 59/200] step 1000/1250 loss≈6.7002
+[ListNet][epoch 59/200] step 1200/1250 loss≈6.7002
+[ListNet][epoch 60/200] step 200/1250 loss≈6.6995
+[ListNet][epoch 60/200] step 400/1250 loss≈6.6997
+[ListNet][epoch 60/200] step 600/1250 loss≈6.6998
+[ListNet][epoch 60/200] step 800/1250 loss≈6.6999
+[ListNet][epoch 60/200] step 1000/1250 loss≈6.6997
+[ListNet][epoch 60/200] step 1200/1250 loss≈6.6997
+[ListNet][epoch 61/200] step 200/1250 loss≈6.6995
+[ListNet][epoch 61/200] step 400/1250 loss≈6.6998
+[ListNet][epoch 61/200] step 600/1250 loss≈6.6997
+[ListNet][epoch 61/200] step 800/1250 loss≈6.7001
+[ListNet][epoch 61/200] step 1000/1250 loss≈6.7001
+[ListNet][epoch 61/200] step 1200/1250 loss≈6.6999
+[ListNet][epoch 62/200] step 200/1250 loss≈6.7001
+[ListNet][epoch 62/200] step 400/1250 loss≈6.7000
+[ListNet][epoch 62/200] step 600/1250 loss≈6.6999
+[ListNet][epoch 62/200] step 800/1250 loss≈6.6999
+[ListNet][epoch 62/200] step 1000/1250 loss≈6.6998
+[ListNet][epoch 62/200] step 1200/1250 loss≈6.6998
+[ListNet][epoch 63/200] step 200/1250 loss≈6.7013
+[ListNet][epoch 63/200] step 400/1250 loss≈6.7008
+[ListNet][epoch 63/200] step 600/1250 loss≈6.7006
+[ListNet][epoch 63/200] step 800/1250 loss≈6.7004
+[ListNet][epoch 63/200] step 1000/1250 loss≈6.7001
+[ListNet][epoch 63/200] step 1200/1250 loss≈6.7001
+[ListNet][epoch 64/200] step 200/1250 loss≈6.6993
+[ListNet][epoch 64/200] step 400/1250 loss≈6.7001
+[ListNet][epoch 64/200] step 600/1250 loss≈6.6999
+[ListNet][epoch 64/200] step 800/1250 loss≈6.7000
+[ListNet][epoch 64/200] step 1000/1250 loss≈6.6999
+[ListNet][epoch 64/200] step 1200/1250 loss≈6.6998
+[ListNet][epoch 65/200] step 200/1250 loss≈6.7056
+[ListNet][epoch 65/200] step 400/1250 loss≈6.7024
+[ListNet][epoch 65/200] step 600/1250 loss≈6.7015
+[ListNet][epoch 65/200] step 800/1250 loss≈6.7011
+[ListNet][epoch 65/200] step 1000/1250 loss≈6.7008
+[ListNet][epoch 65/200] step 1200/1250 loss≈6.7007
+[ListNet][epoch 66/200] step 200/1250 loss≈6.6994
+[ListNet][epoch 66/200] step 400/1250 loss≈6.6998
+[ListNet][epoch 66/200] step 600/1250 loss≈6.6997
+[ListNet][epoch 66/200] step 800/1250 loss≈6.6997
+[ListNet][epoch 66/200] step 1000/1250 loss≈6.6997
+[ListNet][epoch 66/200] step 1200/1250 loss≈6.6998
+[ListNet][epoch 67/200] step 200/1250 loss≈6.6998
+[ListNet][epoch 67/200] step 400/1250 loss≈6.7012
+[ListNet][epoch 67/200] step 600/1250 loss≈6.7007
+[ListNet][epoch 67/200] step 800/1250 loss≈6.7004
+[ListNet][epoch 67/200] step 1000/1250 loss≈6.7003
+[ListNet][epoch 67/200] step 1200/1250 loss≈6.7002
+[ListNet][epoch 68/200] step 200/1250 loss≈6.7014
+[ListNet][epoch 68/200] step 400/1250 loss≈6.7007
+[ListNet][epoch 68/200] step 600/1250 loss≈6.7005
+[ListNet][epoch 68/200] step 800/1250 loss≈6.7002
+[ListNet][epoch 68/200] step 1000/1250 loss≈6.7001
+[ListNet][epoch 68/200] step 1200/1250 loss≈6.7000
+[ListNet][epoch 69/200] step 200/1250 loss≈6.7007
+[ListNet][epoch 69/200] step 400/1250 loss≈6.6999
+[ListNet][epoch 69/200] step 600/1250 loss≈6.6998
+[ListNet][epoch 69/200] step 800/1250 loss≈6.6999
+[ListNet][epoch 69/200] step 1000/1250 loss≈6.6999
+[ListNet][epoch 69/200] step 1200/1250 loss≈6.7010
+[ListNet][epoch 70/200] step 200/1250 loss≈6.7005
+[ListNet][epoch 70/200] step 400/1250 loss≈6.7002
+[ListNet][epoch 70/200] step 600/1250 loss≈6.7001
+[ListNet][epoch 70/200] step 800/1250 loss≈6.7001
+[ListNet][epoch 70/200] step 1000/1250 loss≈6.7001
+[ListNet][epoch 70/200] step 1200/1250 loss≈6.6999
+[ListNet][epoch 71/200] step 200/1250 loss≈6.6998
+[ListNet][epoch 71/200] step 400/1250 loss≈6.6998
+[ListNet][epoch 71/200] step 600/1250 loss≈6.6998
+[ListNet][epoch 71/200] step 800/1250 loss≈6.6999
+[ListNet][epoch 71/200] step 1000/1250 loss≈6.6999
+[ListNet][epoch 71/200] step 1200/1250 loss≈6.6998
+[ListNet][epoch 72/200] step 200/1250 loss≈6.6999
+[ListNet][epoch 72/200] step 400/1250 loss≈6.6999
+[ListNet][epoch 72/200] step 600/1250 loss≈6.7000
+[ListNet][epoch 72/200] step 800/1250 loss≈6.7000
+[ListNet][epoch 72/200] step 1000/1250 loss≈6.7000
+[ListNet][epoch 72/200] step 1200/1250 loss≈6.6998
+[ListNet][epoch 73/200] step 200/1250 loss≈6.7003
+[ListNet][epoch 73/200] step 400/1250 loss≈6.6999
+[ListNet][epoch 73/200] step 600/1250 loss≈6.7000
+[ListNet][epoch 73/200] step 800/1250 loss≈6.7000
+[ListNet][epoch 73/200] step 1000/1250 loss≈6.6999
+[ListNet][epoch 73/200] step 1200/1250 loss≈6.6999
+[ListNet][epoch 74/200] step 200/1250 loss≈6.7001
+[ListNet][epoch 74/200] step 400/1250 loss≈6.6999
+[ListNet][epoch 74/200] step 600/1250 loss≈6.6997
+[ListNet][epoch 74/200] step 800/1250 loss≈6.7000
+[ListNet][epoch 74/200] step 1000/1250 loss≈6.6999
+[ListNet][epoch 74/200] step 1200/1250 loss≈6.6999
+[ListNet][epoch 75/200] step 200/1250 loss≈6.6998
+[ListNet][epoch 75/200] step 400/1250 loss≈6.6999
+[ListNet][epoch 75/200] step 600/1250 loss≈6.6999
+[ListNet][epoch 75/200] step 800/1250 loss≈6.7001
+[ListNet][epoch 75/200] step 1000/1250 loss≈6.7000
+[ListNet][epoch 75/200] step 1200/1250 loss≈6.6999
+[ListNet][epoch 76/200] step 200/1250 loss≈6.6998
+[ListNet][epoch 76/200] step 400/1250 loss≈6.7001
+[ListNet][epoch 76/200] step 600/1250 loss≈6.6998
+[ListNet][epoch 76/200] step 800/1250 loss≈6.6997
+[ListNet][epoch 76/200] step 1000/1250 loss≈6.6998
+[ListNet][epoch 76/200] step 1200/1250 loss≈6.6998
+[ListNet][epoch 77/200] step 200/1250 loss≈6.7026
+[ListNet][epoch 77/200] step 400/1250 loss≈6.7012
+[ListNet][epoch 77/200] step 600/1250 loss≈6.7007
+[ListNet][epoch 77/200] step 800/1250 loss≈6.7004
+[ListNet][epoch 77/200] step 1000/1250 loss≈6.7003
+[ListNet][epoch 77/200] step 1200/1250 loss≈6.7001
+[ListNet][epoch 78/200] step 200/1250 loss≈6.7017
+[ListNet][epoch 78/200] step 400/1250 loss≈6.7007
+[ListNet][epoch 78/200] step 600/1250 loss≈6.7003
+[ListNet][epoch 78/200] step 800/1250 loss≈6.7001
+[ListNet][epoch 78/200] step 1000/1250 loss≈6.7000
+[ListNet][epoch 78/200] step 1200/1250 loss≈6.7000
+[ListNet][epoch 79/200] step 200/1250 loss≈6.6997
+[ListNet][epoch 79/200] step 400/1250 loss≈6.6998
+[ListNet][epoch 79/200] step 600/1250 loss≈6.6998
+[ListNet][epoch 79/200] step 800/1250 loss≈6.7019
+[ListNet][epoch 79/200] step 1000/1250 loss≈6.7016
+[ListNet][epoch 79/200] step 1200/1250 loss≈6.7013
+[ListNet][epoch 80/200] step 200/1250 loss≈6.6997
+[ListNet][epoch 80/200] step 400/1250 loss≈6.6998
+[ListNet][epoch 80/200] step 600/1250 loss≈6.6997
+[ListNet][epoch 80/200] step 800/1250 loss≈6.7000
+[ListNet][epoch 80/200] step 1000/1250 loss≈6.7000
+[ListNet][epoch 80/200] step 1200/1250 loss≈6.7000
+[ListNet][epoch 80/200] loss≈6.6999
+[ListNet][epoch 81/200] step 200/1250 loss≈6.6994
+[ListNet][epoch 81/200] step 400/1250 loss≈6.6996
+[ListNet][epoch 81/200] step 600/1250 loss≈6.7000
+[ListNet][epoch 81/200] step 800/1250 loss≈6.7000
+[ListNet][epoch 81/200] step 1000/1250 loss≈6.6998
+[ListNet][epoch 81/200] step 1200/1250 loss≈6.6999
+[ListNet][epoch 82/200] step 200/1250 loss≈6.6997
+[ListNet][epoch 82/200] step 400/1250 loss≈6.6997
+[ListNet][epoch 82/200] step 600/1250 loss≈6.6996
+[ListNet][epoch 82/200] step 800/1250 loss≈6.7010
+[ListNet][epoch 82/200] step 1000/1250 loss≈6.7009
+[ListNet][epoch 82/200] step 1200/1250 loss≈6.7008
+[ListNet][epoch 83/200] step 200/1250 loss≈6.6989
+[ListNet][epoch 83/200] step 400/1250 loss≈6.6992
+[ListNet][epoch 83/200] step 600/1250 loss≈6.6997
+[ListNet][epoch 83/200] step 800/1250 loss≈6.6998
+[ListNet][epoch 83/200] step 1000/1250 loss≈6.6998
+[ListNet][epoch 83/200] step 1200/1250 loss≈6.6997
+[ListNet][epoch 84/200] step 200/1250 loss≈6.6998
+[ListNet][epoch 84/200] step 400/1250 loss≈6.6998
+[ListNet][epoch 84/200] step 600/1250 loss≈6.7004
+[ListNet][epoch 84/200] step 800/1250 loss≈6.7002
+[ListNet][epoch 84/200] step 1000/1250 loss≈6.7001
+[ListNet][epoch 84/200] step 1200/1250 loss≈6.7000
+[ListNet][epoch 85/200] step 200/1250 loss≈6.7009
+[ListNet][epoch 85/200] step 400/1250 loss≈6.7001
+[ListNet][epoch 85/200] step 600/1250 loss≈6.6999
+[ListNet][epoch 85/200] step 800/1250 loss≈6.6999
+[ListNet][epoch 85/200] step 1000/1250 loss≈6.7000
+[ListNet][epoch 85/200] step 1200/1250 loss≈6.6999
+[ListNet][epoch 86/200] step 200/1250 loss≈6.6999
+[ListNet][epoch 86/200] step 400/1250 loss≈6.6998
+[ListNet][epoch 86/200] step 600/1250 loss≈6.6997
+[ListNet][epoch 86/200] step 800/1250 loss≈6.6998
+[ListNet][epoch 86/200] step 1000/1250 loss≈6.6998
+[ListNet][epoch 86/200] step 1200/1250 loss≈6.6998
+[ListNet][epoch 87/200] step 200/1250 loss≈6.7000
+[ListNet][epoch 87/200] step 400/1250 loss≈6.6999
+[ListNet][epoch 87/200] step 600/1250 loss≈6.6999
+[ListNet][epoch 87/200] step 800/1250 loss≈6.7006
+[ListNet][epoch 87/200] step 1000/1250 loss≈6.7005
+[ListNet][epoch 87/200] step 1200/1250 loss≈6.7003
+[ListNet][epoch 88/200] step 200/1250 loss≈6.7002
+[ListNet][epoch 88/200] step 400/1250 loss≈6.7001
+[ListNet][epoch 88/200] step 600/1250 loss≈6.7000
+[ListNet][epoch 88/200] step 800/1250 loss≈6.6999
+[ListNet][epoch 88/200] step 1000/1250 loss≈6.6999
+[ListNet][epoch 88/200] step 1200/1250 loss≈6.7003
+[ListNet][epoch 89/200] step 200/1250 loss≈6.6995
+[ListNet][epoch 89/200] step 400/1250 loss≈6.6995
+[ListNet][epoch 89/200] step 600/1250 loss≈6.6995
+[ListNet][epoch 89/200] step 800/1250 loss≈6.6999
+[ListNet][epoch 89/200] step 1000/1250 loss≈6.6999
+[ListNet][epoch 89/200] step 1200/1250 loss≈6.6999
+[ListNet][epoch 90/200] step 200/1250 loss≈6.7001
+[ListNet][epoch 90/200] step 400/1250 loss≈6.6999
+[ListNet][epoch 90/200] step 600/1250 loss≈6.6998
+[ListNet][epoch 90/200] step 800/1250 loss≈6.6997
+[ListNet][epoch 90/200] step 1000/1250 loss≈6.7002
+[ListNet][epoch 90/200] step 1200/1250 loss≈6.7001
+[ListNet][epoch 91/200] step 200/1250 loss≈6.6997
+[ListNet][epoch 91/200] step 400/1250 loss≈6.6997
+[ListNet][epoch 91/200] step 600/1250 loss≈6.6998
+[ListNet][epoch 91/200] step 800/1250 loss≈6.6997
+[ListNet][epoch 91/200] step 1000/1250 loss≈6.6997
+[ListNet][epoch 91/200] step 1200/1250 loss≈6.6997
+[ListNet][epoch 92/200] step 200/1250 loss≈6.6995
+[ListNet][epoch 92/200] step 400/1250 loss≈6.7020
+[ListNet][epoch 92/200] step 600/1250 loss≈6.7012
+[ListNet][epoch 92/200] step 800/1250 loss≈6.7010
+[ListNet][epoch 92/200] step 1000/1250 loss≈6.7007
+[ListNet][epoch 92/200] step 1200/1250 loss≈6.7005
+[ListNet][epoch 93/200] step 200/1250 loss≈6.7012
+[ListNet][epoch 93/200] step 400/1250 loss≈6.7003
+[ListNet][epoch 93/200] step 600/1250 loss≈6.7001
+[ListNet][epoch 93/200] step 800/1250 loss≈6.6999
+[ListNet][epoch 93/200] step 1000/1250 loss≈6.6999
+[ListNet][epoch 93/200] step 1200/1250 loss≈6.6998
+[ListNet][epoch 94/200] step 200/1250 loss≈6.6994
+[ListNet][epoch 94/200] step 400/1250 loss≈6.6998
+[ListNet][epoch 94/200] step 600/1250 loss≈6.6999
+[ListNet][epoch 94/200] step 800/1250 loss≈6.6998
+[ListNet][epoch 94/200] step 1000/1250 loss≈6.6998
+[ListNet][epoch 94/200] step 1200/1250 loss≈6.6999
+[ListNet][epoch 95/200] step 200/1250 loss≈6.6994
+[ListNet][epoch 95/200] step 400/1250 loss≈6.6996
+[ListNet][epoch 95/200] step 600/1250 loss≈6.6998
+[ListNet][epoch 95/200] step 800/1250 loss≈6.6997
+[ListNet][epoch 95/200] step 1000/1250 loss≈6.6998
+[ListNet][epoch 95/200] step 1200/1250 loss≈6.6997
+[ListNet][epoch 96/200] step 200/1250 loss≈6.7011
+[ListNet][epoch 96/200] step 400/1250 loss≈6.7017
+[ListNet][epoch 96/200] step 600/1250 loss≈6.7010
+[ListNet][epoch 96/200] step 800/1250 loss≈6.7007
+[ListNet][epoch 96/200] step 1000/1250 loss≈6.7006
+[ListNet][epoch 96/200] step 1200/1250 loss≈6.7007
+[ListNet][epoch 97/200] step 200/1250 loss≈6.6994
+[ListNet][epoch 97/200] step 400/1250 loss≈6.6995
+[ListNet][epoch 97/200] step 600/1250 loss≈6.6996
+[ListNet][epoch 97/200] step 800/1250 loss≈6.6996
+[ListNet][epoch 97/200] step 1000/1250 loss≈6.6999
+[ListNet][epoch 97/200] step 1200/1250 loss≈6.6999
+[ListNet][epoch 98/200] step 200/1250 loss≈6.6996
+[ListNet][epoch 98/200] step 400/1250 loss≈6.6996
+[ListNet][epoch 98/200] step 600/1250 loss≈6.6999
+[ListNet][epoch 98/200] step 800/1250 loss≈6.6998
+[ListNet][epoch 98/200] step 1000/1250 loss≈6.6997
+[ListNet][epoch 98/200] step 1200/1250 loss≈6.6997
+[ListNet][epoch 99/200] step 200/1250 loss≈6.6996
+[ListNet][epoch 99/200] step 400/1250 loss≈6.6994
+[ListNet][epoch 99/200] step 600/1250 loss≈6.6996
+[ListNet][epoch 99/200] step 800/1250 loss≈6.6997
+[ListNet][epoch 99/200] step 1000/1250 loss≈6.7004
+[ListNet][epoch 99/200] step 1200/1250 loss≈6.7003
+[ListNet][epoch 100/200] step 200/1250 loss≈6.6996
+[ListNet][epoch 100/200] step 400/1250 loss≈6.6998
+[ListNet][epoch 100/200] step 600/1250 loss≈6.6998
+[ListNet][epoch 100/200] step 800/1250 loss≈6.6996
+[ListNet][epoch 100/200] step 1000/1250 loss≈6.6997
+[ListNet][epoch 100/200] step 1200/1250 loss≈6.6997
+[ListNet][epoch 101/200] step 200/1250 loss≈6.6994
+[ListNet][epoch 101/200] step 400/1250 loss≈6.7004
+[ListNet][epoch 101/200] step 600/1250 loss≈6.7002
+[ListNet][epoch 101/200] step 800/1250 loss≈6.7002
+[ListNet][epoch 101/200] step 1000/1250 loss≈6.7000
+[ListNet][epoch 101/200] step 1200/1250 loss≈6.7003
+[ListNet][epoch 102/200] step 200/1250 loss≈6.6995
+[ListNet][epoch 102/200] step 400/1250 loss≈6.6994
+[ListNet][epoch 102/200] step 600/1250 loss≈6.6995
+[ListNet][epoch 102/200] step 800/1250 loss≈6.6996
+[ListNet][epoch 102/200] step 1000/1250 loss≈6.6996
+[ListNet][epoch 102/200] step 1200/1250 loss≈6.6997
+[ListNet][epoch 103/200] step 200/1250 loss≈6.7000
+[ListNet][epoch 103/200] step 400/1250 loss≈6.6999
+[ListNet][epoch 103/200] step 600/1250 loss≈6.7002
+[ListNet][epoch 103/200] step 800/1250 loss≈6.7001
+[ListNet][epoch 103/200] step 1000/1250 loss≈6.6999
+[ListNet][epoch 103/200] step 1200/1250 loss≈6.7002
+[ListNet][epoch 104/200] step 200/1250 loss≈6.7001
+[ListNet][epoch 104/200] step 400/1250 loss≈6.6998
+[ListNet][epoch 104/200] step 600/1250 loss≈6.6997
+[ListNet][epoch 104/200] step 800/1250 loss≈6.6997
+[ListNet][epoch 104/200] step 1000/1250 loss≈6.6997
+[ListNet][epoch 104/200] step 1200/1250 loss≈6.6997
+[ListNet][epoch 105/200] step 200/1250 loss≈6.7005
+[ListNet][epoch 105/200] step 400/1250 loss≈6.7000
+[ListNet][epoch 105/200] step 600/1250 loss≈6.6999
+[ListNet][epoch 105/200] step 800/1250 loss≈6.6999
+[ListNet][epoch 105/200] step 1000/1250 loss≈6.6999
+[ListNet][epoch 105/200] step 1200/1250 loss≈6.7000
+[ListNet][epoch 106/200] step 200/1250 loss≈6.6994
+[ListNet][epoch 106/200] step 400/1250 loss≈6.6996
+[ListNet][epoch 106/200] step 600/1250 loss≈6.7000
+[ListNet][epoch 106/200] step 800/1250 loss≈6.6999
+[ListNet][epoch 106/200] step 1000/1250 loss≈6.6998
+[ListNet][epoch 106/200] step 1200/1250 loss≈6.6998
+[ListNet][epoch 107/200] step 200/1250 loss≈6.6995
+[ListNet][epoch 107/200] step 400/1250 loss≈6.7000
+[ListNet][epoch 107/200] step 600/1250 loss≈6.6999
+[ListNet][epoch 107/200] step 800/1250 loss≈6.6998
+[ListNet][epoch 107/200] step 1000/1250 loss≈6.6999
+[ListNet][epoch 107/200] step 1200/1250 loss≈6.7000
+[ListNet][epoch 108/200] step 200/1250 loss≈6.6994
+[ListNet][epoch 108/200] step 400/1250 loss≈6.6996
+[ListNet][epoch 108/200] step 600/1250 loss≈6.6996
+[ListNet][epoch 108/200] step 800/1250 loss≈6.6997
+[ListNet][epoch 108/200] step 1000/1250 loss≈6.6997
+[ListNet][epoch 108/200] step 1200/1250 loss≈6.6997
+[ListNet][epoch 109/200] step 200/1250 loss≈6.7006
+[ListNet][epoch 109/200] step 400/1250 loss≈6.7002
+[ListNet][epoch 109/200] step 600/1250 loss≈6.7005
+[ListNet][epoch 109/200] step 800/1250 loss≈6.7003
+[ListNet][epoch 109/200] step 1000/1250 loss≈6.7002
+[ListNet][epoch 109/200] step 1200/1250 loss≈6.7001
+[ListNet][epoch 110/200] step 200/1250 loss≈6.6998
+[ListNet][epoch 110/200] step 400/1250 loss≈6.7002
+[ListNet][epoch 110/200] step 600/1250 loss≈6.7000
+[ListNet][epoch 110/200] step 800/1250 loss≈6.6998
+[ListNet][epoch 110/200] step 1000/1250 loss≈6.6997
+[ListNet][epoch 110/200] step 1200/1250 loss≈6.7005
+[ListNet][epoch 111/200] step 200/1250 loss≈6.7018
+[ListNet][epoch 111/200] step 400/1250 loss≈6.7012
+[ListNet][epoch 111/200] step 600/1250 loss≈6.7008
+[ListNet][epoch 111/200] step 800/1250 loss≈6.7006
+[ListNet][epoch 111/200] step 1000/1250 loss≈6.7004
+[ListNet][epoch 111/200] step 1200/1250 loss≈6.7003
+[ListNet][epoch 112/200] step 200/1250 loss≈6.6996
+[ListNet][epoch 112/200] step 400/1250 loss≈6.7001
+[ListNet][epoch 112/200] step 600/1250 loss≈6.7000
+[ListNet][epoch 112/200] step 800/1250 loss≈6.7000
+[ListNet][epoch 112/200] step 1000/1250 loss≈6.6999
+[ListNet][epoch 112/200] step 1200/1250 loss≈6.7000
+[ListNet][epoch 113/200] step 200/1250 loss≈6.7001
+[ListNet][epoch 113/200] step 400/1250 loss≈6.7000
+[ListNet][epoch 113/200] step 600/1250 loss≈6.6997
+[ListNet][epoch 113/200] step 800/1250 loss≈6.6997
+[ListNet][epoch 113/200] step 1000/1250 loss≈6.6997
+[ListNet][epoch 113/200] step 1200/1250 loss≈6.6999
+[ListNet][epoch 114/200] step 200/1250 loss≈6.6998
+[ListNet][epoch 114/200] step 400/1250 loss≈6.6994
+[ListNet][epoch 114/200] step 600/1250 loss≈6.6996
+[ListNet][epoch 114/200] step 800/1250 loss≈6.6996
+[ListNet][epoch 114/200] step 1000/1250 loss≈6.6997
+[ListNet][epoch 114/200] step 1200/1250 loss≈6.6997
+[ListNet][epoch 115/200] step 200/1250 loss≈6.7006
+[ListNet][epoch 115/200] step 400/1250 loss≈6.7001
+[ListNet][epoch 115/200] step 600/1250 loss≈6.7001
+[ListNet][epoch 115/200] step 800/1250 loss≈6.7000
+[ListNet][epoch 115/200] step 1000/1250 loss≈6.6999
+[ListNet][epoch 115/200] step 1200/1250 loss≈6.6999
+[ListNet][epoch 116/200] step 200/1250 loss≈6.6996
+[ListNet][epoch 116/200] step 400/1250 loss≈6.6999
+[ListNet][epoch 116/200] step 600/1250 loss≈6.6999
+[ListNet][epoch 116/200] step 800/1250 loss≈6.6998
+[ListNet][epoch 116/200] step 1000/1250 loss≈6.6998
+[ListNet][epoch 116/200] step 1200/1250 loss≈6.6998
+[ListNet][epoch 117/200] step 200/1250 loss≈6.7016
+[ListNet][epoch 117/200] step 400/1250 loss≈6.7007
+[ListNet][epoch 117/200] step 600/1250 loss≈6.7004
+[ListNet][epoch 117/200] step 800/1250 loss≈6.7002
+[ListNet][epoch 117/200] step 1000/1250 loss≈6.7000
+[ListNet][epoch 117/200] step 1200/1250 loss≈6.7000
+[ListNet][epoch 118/200] step 200/1250 loss≈6.6998
+[ListNet][epoch 118/200] step 400/1250 loss≈6.6997
+[ListNet][epoch 118/200] step 600/1250 loss≈6.6998
+[ListNet][epoch 118/200] step 800/1250 loss≈6.6999
+[ListNet][epoch 118/200] step 1000/1250 loss≈6.6998
+[ListNet][epoch 118/200] step 1200/1250 loss≈6.6998
+[ListNet][epoch 119/200] step 200/1250 loss≈6.6996
+[ListNet][epoch 119/200] step 400/1250 loss≈6.6997
+[ListNet][epoch 119/200] step 600/1250 loss≈6.7001
+[ListNet][epoch 119/200] step 800/1250 loss≈6.7000
+[ListNet][epoch 119/200] step 1000/1250 loss≈6.7000
+[ListNet][epoch 119/200] step 1200/1250 loss≈6.7000
+[ListNet][epoch 120/200] step 200/1250 loss≈6.6998
+[ListNet][epoch 120/200] step 400/1250 loss≈6.7003
+[ListNet][epoch 120/200] step 600/1250 loss≈6.7000
+[ListNet][epoch 120/200] step 800/1250 loss≈6.6999
+[ListNet][epoch 120/200] step 1000/1250 loss≈6.6998
+[ListNet][epoch 120/200] step 1200/1250 loss≈6.6999
+[ListNet][epoch 120/200] loss≈6.6999
+[ListNet][epoch 121/200] step 200/1250 loss≈6.6997
+[ListNet][epoch 121/200] step 400/1250 loss≈6.7000
+[ListNet][epoch 121/200] step 600/1250 loss≈6.6998
+[ListNet][epoch 121/200] step 800/1250 loss≈6.6998
+[ListNet][epoch 121/200] step 1000/1250 loss≈6.6999
+[ListNet][epoch 121/200] step 1200/1250 loss≈6.6998
+[ListNet][epoch 122/200] step 200/1250 loss≈6.6999
+[ListNet][epoch 122/200] step 400/1250 loss≈6.7000
+[ListNet][epoch 122/200] step 600/1250 loss≈6.7001
+[ListNet][epoch 122/200] step 800/1250 loss≈6.7000
+[ListNet][epoch 122/200] step 1000/1250 loss≈6.6998
+[ListNet][epoch 122/200] step 1200/1250 loss≈6.7016
+[ListNet][epoch 123/200] step 200/1250 loss≈6.7021
+[ListNet][epoch 123/200] step 400/1250 loss≈6.7014
+[ListNet][epoch 123/200] step 600/1250 loss≈6.7008
+[ListNet][epoch 123/200] step 800/1250 loss≈6.7007
+[ListNet][epoch 123/200] step 1000/1250 loss≈6.7006
+[ListNet][epoch 123/200] step 1200/1250 loss≈6.7005
+[ListNet][epoch 124/200] step 200/1250 loss≈6.6999
+[ListNet][epoch 124/200] step 400/1250 loss≈6.6999
+[ListNet][epoch 124/200] step 600/1250 loss≈6.6998
+[ListNet][epoch 124/200] step 800/1250 loss≈6.6999
+[ListNet][epoch 124/200] step 1000/1250 loss≈6.6999
+[ListNet][epoch 124/200] step 1200/1250 loss≈6.6999
+[ListNet][epoch 125/200] step 200/1250 loss≈6.6999
+[ListNet][epoch 125/200] step 400/1250 loss≈6.6997
+[ListNet][epoch 125/200] step 600/1250 loss≈6.6998
+[ListNet][epoch 125/200] step 800/1250 loss≈6.6998
+[ListNet][epoch 125/200] step 1000/1250 loss≈6.6998
+[ListNet][epoch 125/200] step 1200/1250 loss≈6.6999
+[ListNet][epoch 126/200] step 200/1250 loss≈6.6994
+[ListNet][epoch 126/200] step 400/1250 loss≈6.6999
+[ListNet][epoch 126/200] step 600/1250 loss≈6.7000
+[ListNet][epoch 126/200] step 800/1250 loss≈6.6999
+[ListNet][epoch 126/200] step 1000/1250 loss≈6.6999
+[ListNet][epoch 126/200] step 1200/1250 loss≈6.6998
+[ListNet][epoch 127/200] step 200/1250 loss≈6.6999
+[ListNet][epoch 127/200] step 400/1250 loss≈6.7000
+[ListNet][epoch 127/200] step 600/1250 loss≈6.6999
+[ListNet][epoch 127/200] step 800/1250 loss≈6.6999
+[ListNet][epoch 127/200] step 1000/1250 loss≈6.7000
+[ListNet][epoch 127/200] step 1200/1250 loss≈6.6999
+[ListNet][epoch 128/200] step 200/1250 loss≈6.6999
+[ListNet][epoch 128/200] step 400/1250 loss≈6.7002
+[ListNet][epoch 128/200] step 600/1250 loss≈6.7000
+[ListNet][epoch 128/200] step 800/1250 loss≈6.7000
+[ListNet][epoch 128/200] step 1000/1250 loss≈6.6999
+[ListNet][epoch 128/200] step 1200/1250 loss≈6.6999
+[ListNet][epoch 129/200] step 200/1250 loss≈6.6994
+[ListNet][epoch 129/200] step 400/1250 loss≈6.6994
+[ListNet][epoch 129/200] step 600/1250 loss≈6.7006
+[ListNet][epoch 129/200] step 800/1250 loss≈6.7004
+[ListNet][epoch 129/200] step 1000/1250 loss≈6.7003
+[ListNet][epoch 129/200] step 1200/1250 loss≈6.7003
+[ListNet][epoch 130/200] step 200/1250 loss≈6.6997
+[ListNet][epoch 130/200] step 400/1250 loss≈6.6996
+[ListNet][epoch 130/200] step 600/1250 loss≈6.6997
+[ListNet][epoch 130/200] step 800/1250 loss≈6.7004
+[ListNet][epoch 130/200] step 1000/1250 loss≈6.7003
+[ListNet][epoch 130/200] step 1200/1250 loss≈6.7002
+[ListNet][epoch 131/200] step 200/1250 loss≈6.6995
+[ListNet][epoch 131/200] step 400/1250 loss≈6.6996
+[ListNet][epoch 131/200] step 600/1250 loss≈6.6998
+[ListNet][epoch 131/200] step 800/1250 loss≈6.7004
+[ListNet][epoch 131/200] step 1000/1250 loss≈6.7003
+[ListNet][epoch 131/200] step 1200/1250 loss≈6.7002
+[ListNet][epoch 132/200] step 200/1250 loss≈6.7000
+[ListNet][epoch 132/200] step 400/1250 loss≈6.7004
+[ListNet][epoch 132/200] step 600/1250 loss≈6.7000
+[ListNet][epoch 132/200] step 800/1250 loss≈6.6999
+[ListNet][epoch 132/200] step 1000/1250 loss≈6.6999
+[ListNet][epoch 132/200] step 1200/1250 loss≈6.6999
+[ListNet][epoch 133/200] step 200/1250 loss≈6.6996
+[ListNet][epoch 133/200] step 400/1250 loss≈6.7002
+[ListNet][epoch 133/200] step 600/1250 loss≈6.7000
+[ListNet][epoch 133/200] step 800/1250 loss≈6.7000
+[ListNet][epoch 133/200] step 1000/1250 loss≈6.6998
+[ListNet][epoch 133/200] step 1200/1250 loss≈6.6998
+[ListNet][epoch 134/200] step 200/1250 loss≈6.7001
+[ListNet][epoch 134/200] step 400/1250 loss≈6.6998
+[ListNet][epoch 134/200] step 600/1250 loss≈6.6998
+[ListNet][epoch 134/200] step 800/1250 loss≈6.6998
+[ListNet][epoch 134/200] step 1000/1250 loss≈6.6998
+[ListNet][epoch 134/200] step 1200/1250 loss≈6.6997
+[ListNet][epoch 135/200] step 200/1250 loss≈6.7017
+[ListNet][epoch 135/200] step 400/1250 loss≈6.7006
+[ListNet][epoch 135/200] step 600/1250 loss≈6.7003
+[ListNet][epoch 135/200] step 800/1250 loss≈6.7003
+[ListNet][epoch 135/200] step 1000/1250 loss≈6.7002
+[ListNet][epoch 135/200] step 1200/1250 loss≈6.7001
+[ListNet][epoch 136/200] step 200/1250 loss≈6.6999
+[ListNet][epoch 136/200] step 400/1250 loss≈6.6999
+[ListNet][epoch 136/200] step 600/1250 loss≈6.6998
+[ListNet][epoch 136/200] step 800/1250 loss≈6.6999
+[ListNet][epoch 136/200] step 1000/1250 loss≈6.6999
+[ListNet][epoch 136/200] step 1200/1250 loss≈6.6998
+[ListNet][epoch 137/200] step 200/1250 loss≈6.6996
+[ListNet][epoch 137/200] step 400/1250 loss≈6.7026
+[ListNet][epoch 137/200] step 600/1250 loss≈6.7029
+[ListNet][epoch 137/200] step 800/1250 loss≈6.7024
+[ListNet][epoch 137/200] step 1000/1250 loss≈6.7019
+[ListNet][epoch 137/200] step 1200/1250 loss≈6.7016
+[ListNet][epoch 138/200] step 200/1250 loss≈6.7002
+[ListNet][epoch 138/200] step 400/1250 loss≈6.7003
+[ListNet][epoch 138/200] step 600/1250 loss≈6.7001
+[ListNet][epoch 138/200] step 800/1250 loss≈6.7000
+[ListNet][epoch 138/200] step 1000/1250 loss≈6.6999
+[ListNet][epoch 138/200] step 1200/1250 loss≈6.6999
+[ListNet][epoch 139/200] step 200/1250 loss≈6.6998
+[ListNet][epoch 139/200] step 400/1250 loss≈6.6998
+[ListNet][epoch 139/200] step 600/1250 loss≈6.6999
+[ListNet][epoch 139/200] step 800/1250 loss≈6.6998
+[ListNet][epoch 139/200] step 1000/1250 loss≈6.6998
+[ListNet][epoch 139/200] step 1200/1250 loss≈6.6998
+[ListNet][epoch 140/200] step 200/1250 loss≈6.7002
+[ListNet][epoch 140/200] step 400/1250 loss≈6.6999
+[ListNet][epoch 140/200] step 600/1250 loss≈6.7000
+[ListNet][epoch 140/200] step 800/1250 loss≈6.6999
+[ListNet][epoch 140/200] step 1000/1250 loss≈6.6999
+[ListNet][epoch 140/200] step 1200/1250 loss≈6.6999
+[ListNet][epoch 141/200] step 200/1250 loss≈6.6998
+[ListNet][epoch 141/200] step 400/1250 loss≈6.6996
+[ListNet][epoch 141/200] step 600/1250 loss≈6.6997
+[ListNet][epoch 141/200] step 800/1250 loss≈6.6998
+[ListNet][epoch 141/200] step 1000/1250 loss≈6.6997
+[ListNet][epoch 141/200] step 1200/1250 loss≈6.6998
+[ListNet][epoch 142/200] step 200/1250 loss≈6.6998
+[ListNet][epoch 142/200] step 400/1250 loss≈6.6997
+[ListNet][epoch 142/200] step 600/1250 loss≈6.6998
+[ListNet][epoch 142/200] step 800/1250 loss≈6.6998
+[ListNet][epoch 142/200] step 1000/1250 loss≈6.6998
+[ListNet][epoch 142/200] step 1200/1250 loss≈6.7000
+[ListNet][epoch 143/200] step 200/1250 loss≈6.6994
+[ListNet][epoch 143/200] step 400/1250 loss≈6.6997
+[ListNet][epoch 143/200] step 600/1250 loss≈6.6998
+[ListNet][epoch 143/200] step 800/1250 loss≈6.7004
+[ListNet][epoch 143/200] step 1000/1250 loss≈6.7002
+[ListNet][epoch 143/200] step 1200/1250 loss≈6.7002
+[ListNet][epoch 144/200] step 200/1250 loss≈6.6997
+[ListNet][epoch 144/200] step 400/1250 loss≈6.6997
+[ListNet][epoch 144/200] step 600/1250 loss≈6.6999
+[ListNet][epoch 144/200] step 800/1250 loss≈6.6998
+[ListNet][epoch 144/200] step 1000/1250 loss≈6.6998
+[ListNet][epoch 144/200] step 1200/1250 loss≈6.6999
+[ListNet][epoch 145/200] step 200/1250 loss≈6.6993
+[ListNet][epoch 145/200] step 400/1250 loss≈6.6997
+[ListNet][epoch 145/200] step 600/1250 loss≈6.6998
+[ListNet][epoch 145/200] step 800/1250 loss≈6.6998
+[ListNet][epoch 145/200] step 1000/1250 loss≈6.6997
+[ListNet][epoch 145/200] step 1200/1250 loss≈6.6998
+[ListNet][epoch 146/200] step 200/1250 loss≈6.7001
+[ListNet][epoch 146/200] step 400/1250 loss≈6.6999
+[ListNet][epoch 146/200] step 600/1250 loss≈6.6999
+[ListNet][epoch 146/200] step 800/1250 loss≈6.6998
+[ListNet][epoch 146/200] step 1000/1250 loss≈6.7001
+[ListNet][epoch 146/200] step 1200/1250 loss≈6.7002
+[ListNet][epoch 147/200] step 200/1250 loss≈6.6998
+[ListNet][epoch 147/200] step 400/1250 loss≈6.6996
+[ListNet][epoch 147/200] step 600/1250 loss≈6.7000
+[ListNet][epoch 147/200] step 800/1250 loss≈6.6999
+[ListNet][epoch 147/200] step 1000/1250 loss≈6.6998
+[ListNet][epoch 147/200] step 1200/1250 loss≈6.6998
+[ListNet][epoch 148/200] step 200/1250 loss≈6.7023
+[ListNet][epoch 148/200] step 400/1250 loss≈6.7009
+[ListNet][epoch 148/200] step 600/1250 loss≈6.7005
+[ListNet][epoch 148/200] step 800/1250 loss≈6.7003
+[ListNet][epoch 148/200] step 1000/1250 loss≈6.7002
+[ListNet][epoch 148/200] step 1200/1250 loss≈6.7001
+[ListNet][epoch 149/200] step 200/1250 loss≈6.6996
+[ListNet][epoch 149/200] step 400/1250 loss≈6.7012
+[ListNet][epoch 149/200] step 600/1250 loss≈6.7009
+[ListNet][epoch 149/200] step 800/1250 loss≈6.7007
+[ListNet][epoch 149/200] step 1000/1250 loss≈6.7005
+[ListNet][epoch 149/200] step 1200/1250 loss≈6.7003
+[ListNet][epoch 150/200] step 200/1250 loss≈6.7011
+[ListNet][epoch 150/200] step 400/1250 loss≈6.7002
+[ListNet][epoch 150/200] step 600/1250 loss≈6.7001
+[ListNet][epoch 150/200] step 800/1250 loss≈6.7000
+[ListNet][epoch 150/200] step 1000/1250 loss≈6.7000
+[ListNet][epoch 150/200] step 1200/1250 loss≈6.7000
+[ListNet][epoch 151/200] step 200/1250 loss≈6.6997
+[ListNet][epoch 151/200] step 400/1250 loss≈6.6997
+[ListNet][epoch 151/200] step 600/1250 loss≈6.7001
+[ListNet][epoch 151/200] step 800/1250 loss≈6.7000
+[ListNet][epoch 151/200] step 1000/1250 loss≈6.6999
+[ListNet][epoch 151/200] step 1200/1250 loss≈6.6998
+[ListNet][epoch 152/200] step 200/1250 loss≈6.7006
+[ListNet][epoch 152/200] step 400/1250 loss≈6.7002
+[ListNet][epoch 152/200] step 600/1250 loss≈6.7000
+[ListNet][epoch 152/200] step 800/1250 loss≈6.7000
+[ListNet][epoch 152/200] step 1000/1250 loss≈6.6999
+[ListNet][epoch 152/200] step 1200/1250 loss≈6.6999
+[ListNet][epoch 153/200] step 200/1250 loss≈6.6996
+[ListNet][epoch 153/200] step 400/1250 loss≈6.7005
+[ListNet][epoch 153/200] step 600/1250 loss≈6.7003
+[ListNet][epoch 153/200] step 800/1250 loss≈6.7001
+[ListNet][epoch 153/200] step 1000/1250 loss≈6.7001
+[ListNet][epoch 153/200] step 1200/1250 loss≈6.7000
+[ListNet][epoch 154/200] step 200/1250 loss≈6.6994
+[ListNet][epoch 154/200] step 400/1250 loss≈6.6999
+[ListNet][epoch 154/200] step 600/1250 loss≈6.7000
+[ListNet][epoch 154/200] step 800/1250 loss≈6.6998
+[ListNet][epoch 154/200] step 1000/1250 loss≈6.7001
+[ListNet][epoch 154/200] step 1200/1250 loss≈6.7000
+[ListNet][epoch 155/200] step 200/1250 loss≈6.6996
+[ListNet][epoch 155/200] step 400/1250 loss≈6.6995
+[ListNet][epoch 155/200] step 600/1250 loss≈6.6997
+[ListNet][epoch 155/200] step 800/1250 loss≈6.6997
+[ListNet][epoch 155/200] step 1000/1250 loss≈6.6997
+[ListNet][epoch 155/200] step 1200/1250 loss≈6.6998
+[ListNet][epoch 156/200] step 200/1250 loss≈6.6997
+[ListNet][epoch 156/200] step 400/1250 loss≈6.6995
+[ListNet][epoch 156/200] step 600/1250 loss≈6.6997
+[ListNet][epoch 156/200] step 800/1250 loss≈6.6997
+[ListNet][epoch 156/200] step 1000/1250 loss≈6.6998
+[ListNet][epoch 156/200] step 1200/1250 loss≈6.6998
+[ListNet][epoch 157/200] step 200/1250 loss≈6.7005
+[ListNet][epoch 157/200] step 400/1250 loss≈6.6999
+[ListNet][epoch 157/200] step 600/1250 loss≈6.6999
+[ListNet][epoch 157/200] step 800/1250 loss≈6.6999
+[ListNet][epoch 157/200] step 1000/1250 loss≈6.6999
+[ListNet][epoch 157/200] step 1200/1250 loss≈6.6998
+[ListNet][epoch 158/200] step 200/1250 loss≈6.6998
+[ListNet][epoch 158/200] step 400/1250 loss≈6.6996
+[ListNet][epoch 158/200] step 600/1250 loss≈6.7003
+[ListNet][epoch 158/200] step 800/1250 loss≈6.7001
+[ListNet][epoch 158/200] step 1000/1250 loss≈6.6999
+[ListNet][epoch 158/200] step 1200/1250 loss≈6.6999
+[ListNet][epoch 159/200] step 200/1250 loss≈6.7000
+[ListNet][epoch 159/200] step 400/1250 loss≈6.6997
+[ListNet][epoch 159/200] step 600/1250 loss≈6.6998
+[ListNet][epoch 159/200] step 800/1250 loss≈6.6998
+[ListNet][epoch 159/200] step 1000/1250 loss≈6.6998
+[ListNet][epoch 159/200] step 1200/1250 loss≈6.6997
+[ListNet][epoch 160/200] step 200/1250 loss≈6.7005
+[ListNet][epoch 160/200] step 400/1250 loss≈6.7000
+[ListNet][epoch 160/200] step 600/1250 loss≈6.6999
+[ListNet][epoch 160/200] step 800/1250 loss≈6.7000
+[ListNet][epoch 160/200] step 1000/1250 loss≈6.7000
+[ListNet][epoch 160/200] step 1200/1250 loss≈6.6999
+[ListNet][epoch 160/200] loss≈6.6998
+[ListNet][epoch 161/200] step 200/1250 loss≈6.7003
+[ListNet][epoch 161/200] step 400/1250 loss≈6.7001
+[ListNet][epoch 161/200] step 600/1250 loss≈6.7000
+[ListNet][epoch 161/200] step 800/1250 loss≈6.7002
+[ListNet][epoch 161/200] step 1000/1250 loss≈6.7002
+[ListNet][epoch 161/200] step 1200/1250 loss≈6.7000
+[ListNet][epoch 162/200] step 200/1250 loss≈6.6996
+[ListNet][epoch 162/200] step 400/1250 loss≈6.6997
+[ListNet][epoch 162/200] step 600/1250 loss≈6.6996
+[ListNet][epoch 162/200] step 800/1250 loss≈6.6999
+[ListNet][epoch 162/200] step 1000/1250 loss≈6.6999
+[ListNet][epoch 162/200] step 1200/1250 loss≈6.6999
+[ListNet][epoch 163/200] step 200/1250 loss≈6.7000
+[ListNet][epoch 163/200] step 400/1250 loss≈6.7003
+[ListNet][epoch 163/200] step 600/1250 loss≈6.7001
+[ListNet][epoch 163/200] step 800/1250 loss≈6.7000
+[ListNet][epoch 163/200] step 1000/1250 loss≈6.6999
+[ListNet][epoch 163/200] step 1200/1250 loss≈6.6999
+[ListNet][epoch 164/200] step 200/1250 loss≈6.6995
+[ListNet][epoch 164/200] step 400/1250 loss≈6.7002
+[ListNet][epoch 164/200] step 600/1250 loss≈6.6999
+[ListNet][epoch 164/200] step 800/1250 loss≈6.7000
+[ListNet][epoch 164/200] step 1000/1250 loss≈6.6999
+[ListNet][epoch 164/200] step 1200/1250 loss≈6.6999
+[ListNet][epoch 165/200] step 200/1250 loss≈6.6996
+[ListNet][epoch 165/200] step 400/1250 loss≈6.7002
+[ListNet][epoch 165/200] step 600/1250 loss≈6.7000
+[ListNet][epoch 165/200] step 800/1250 loss≈6.6999
+[ListNet][epoch 165/200] step 1000/1250 loss≈6.6999
+[ListNet][epoch 165/200] step 1200/1250 loss≈6.7000
+[ListNet][epoch 166/200] step 200/1250 loss≈6.6998
+[ListNet][epoch 166/200] step 400/1250 loss≈6.6999
+[ListNet][epoch 166/200] step 600/1250 loss≈6.6997
+[ListNet][epoch 166/200] step 800/1250 loss≈6.7001
+[ListNet][epoch 166/200] step 1000/1250 loss≈6.7000
+[ListNet][epoch 166/200] step 1200/1250 loss≈6.6999
+[ListNet][epoch 167/200] step 200/1250 loss≈6.6998
+[ListNet][epoch 167/200] step 400/1250 loss≈6.6996
+[ListNet][epoch 167/200] step 600/1250 loss≈6.6995
+[ListNet][epoch 167/200] step 800/1250 loss≈6.6996
+[ListNet][epoch 167/200] step 1000/1250 loss≈6.6997
+[ListNet][epoch 167/200] step 1200/1250 loss≈6.7000
+[ListNet][epoch 168/200] step 200/1250 loss≈6.6992
+[ListNet][epoch 168/200] step 400/1250 loss≈6.6993
+[ListNet][epoch 168/200] step 600/1250 loss≈6.6995
+[ListNet][epoch 168/200] step 800/1250 loss≈6.6996
+[ListNet][epoch 168/200] step 1000/1250 loss≈6.6996
+[ListNet][epoch 168/200] step 1200/1250 loss≈6.6997
+[ListNet][epoch 169/200] step 200/1250 loss≈6.7000
+[ListNet][epoch 169/200] step 400/1250 loss≈6.6998
+[ListNet][epoch 169/200] step 600/1250 loss≈6.6998
+[ListNet][epoch 169/200] step 800/1250 loss≈6.6998
+[ListNet][epoch 169/200] step 1000/1250 loss≈6.6998
+[ListNet][epoch 169/200] step 1200/1250 loss≈6.6998
+[ListNet][epoch 170/200] step 200/1250 loss≈6.6999
+[ListNet][epoch 170/200] step 400/1250 loss≈6.6999
+[ListNet][epoch 170/200] step 600/1250 loss≈6.6997
+[ListNet][epoch 170/200] step 800/1250 loss≈6.6998
+[ListNet][epoch 170/200] step 1000/1250 loss≈6.6998
+[ListNet][epoch 170/200] step 1200/1250 loss≈6.6997
+[ListNet][epoch 171/200] step 200/1250 loss≈6.7003
+[ListNet][epoch 171/200] step 400/1250 loss≈6.7000
+[ListNet][epoch 171/200] step 600/1250 loss≈6.6997
+[ListNet][epoch 171/200] step 800/1250 loss≈6.6996
+[ListNet][epoch 171/200] step 1000/1250 loss≈6.6997
+[ListNet][epoch 171/200] step 1200/1250 loss≈6.6998
+[ListNet][epoch 172/200] step 200/1250 loss≈6.6998
+[ListNet][epoch 172/200] step 400/1250 loss≈6.6999
+[ListNet][epoch 172/200] step 600/1250 loss≈6.6998
+[ListNet][epoch 172/200] step 800/1250 loss≈6.6998
+[ListNet][epoch 172/200] step 1000/1250 loss≈6.7002
+[ListNet][epoch 172/200] step 1200/1250 loss≈6.7002
+[ListNet][epoch 173/200] step 200/1250 loss≈6.6996
+[ListNet][epoch 173/200] step 400/1250 loss≈6.6995
+[ListNet][epoch 173/200] step 600/1250 loss≈6.6994
+[ListNet][epoch 173/200] step 800/1250 loss≈6.6996
+[ListNet][epoch 173/200] step 1000/1250 loss≈6.6997
+[ListNet][epoch 173/200] step 1200/1250 loss≈6.6997
+[ListNet][epoch 174/200] step 200/1250 loss≈6.6997
+[ListNet][epoch 174/200] step 400/1250 loss≈6.7015
+[ListNet][epoch 174/200] step 600/1250 loss≈6.7009
+[ListNet][epoch 174/200] step 800/1250 loss≈6.7006
+[ListNet][epoch 174/200] step 1000/1250 loss≈6.7004
+[ListNet][epoch 174/200] step 1200/1250 loss≈6.7003
+[ListNet][epoch 175/200] step 200/1250 loss≈6.6998
+[ListNet][epoch 175/200] step 400/1250 loss≈6.7000
+[ListNet][epoch 175/200] step 600/1250 loss≈6.6998
+[ListNet][epoch 175/200] step 800/1250 loss≈6.6998
+[ListNet][epoch 175/200] step 1000/1250 loss≈6.7000
+[ListNet][epoch 175/200] step 1200/1250 loss≈6.6999
+[ListNet][epoch 176/200] step 200/1250 loss≈6.6999
+[ListNet][epoch 176/200] step 400/1250 loss≈6.7000
+[ListNet][epoch 176/200] step 600/1250 loss≈6.6999
+[ListNet][epoch 176/200] step 800/1250 loss≈6.7000
+[ListNet][epoch 176/200] step 1000/1250 loss≈6.6998
+[ListNet][epoch 176/200] step 1200/1250 loss≈6.6998
+[ListNet][epoch 177/200] step 200/1250 loss≈6.6995
+[ListNet][epoch 177/200] step 400/1250 loss≈6.6996
+[ListNet][epoch 177/200] step 600/1250 loss≈6.6998
+[ListNet][epoch 177/200] step 800/1250 loss≈6.6998
+[ListNet][epoch 177/200] step 1000/1250 loss≈6.6998
+[ListNet][epoch 177/200] step 1200/1250 loss≈6.7001
+[ListNet][epoch 178/200] step 200/1250 loss≈6.6994
+[ListNet][epoch 178/200] step 400/1250 loss≈6.6996
+[ListNet][epoch 178/200] step 600/1250 loss≈6.6996
+[ListNet][epoch 178/200] step 800/1250 loss≈6.6997
+[ListNet][epoch 178/200] step 1000/1250 loss≈6.7000
+[ListNet][epoch 178/200] step 1200/1250 loss≈6.7000
+[ListNet][epoch 179/200] step 200/1250 loss≈6.6997
+[ListNet][epoch 179/200] step 400/1250 loss≈6.6998
+[ListNet][epoch 179/200] step 600/1250 loss≈6.7001
+[ListNet][epoch 179/200] step 800/1250 loss≈6.6998
+[ListNet][epoch 179/200] step 1000/1250 loss≈6.6998
+[ListNet][epoch 179/200] step 1200/1250 loss≈6.6998
+[ListNet][epoch 180/200] step 200/1250 loss≈6.6993
+[ListNet][epoch 180/200] step 400/1250 loss≈6.6997
+[ListNet][epoch 180/200] step 600/1250 loss≈6.6997
+[ListNet][epoch 180/200] step 800/1250 loss≈6.6997
+[ListNet][epoch 180/200] step 1000/1250 loss≈6.7000
+[ListNet][epoch 180/200] step 1200/1250 loss≈6.7000
+[ListNet][epoch 181/200] step 200/1250 loss≈6.6996
+[ListNet][epoch 181/200] step 400/1250 loss≈6.6992
+[ListNet][epoch 181/200] step 600/1250 loss≈6.6996
+[ListNet][epoch 181/200] step 800/1250 loss≈6.6997
+[ListNet][epoch 181/200] step 1000/1250 loss≈6.6997
+[ListNet][epoch 181/200] step 1200/1250 loss≈6.6998
+[ListNet][epoch 182/200] step 200/1250 loss≈6.6997
+[ListNet][epoch 182/200] step 400/1250 loss≈6.6998
+[ListNet][epoch 182/200] step 600/1250 loss≈6.6997
+[ListNet][epoch 182/200] step 800/1250 loss≈6.6996
+[ListNet][epoch 182/200] step 1000/1250 loss≈6.6998
+[ListNet][epoch 182/200] step 1200/1250 loss≈6.6997
+[ListNet][epoch 183/200] step 200/1250 loss≈6.7007
+[ListNet][epoch 183/200] step 400/1250 loss≈6.7003
+[ListNet][epoch 183/200] step 600/1250 loss≈6.7002
+[ListNet][epoch 183/200] step 800/1250 loss≈6.7000
+[ListNet][epoch 183/200] step 1000/1250 loss≈6.7000
+[ListNet][epoch 183/200] step 1200/1250 loss≈6.6999
+[ListNet][epoch 184/200] step 200/1250 loss≈6.7001
+[ListNet][epoch 184/200] step 400/1250 loss≈6.6998
+[ListNet][epoch 184/200] step 600/1250 loss≈6.6999
+[ListNet][epoch 184/200] step 800/1250 loss≈6.6998
+[ListNet][epoch 184/200] step 1000/1250 loss≈6.6998
+[ListNet][epoch 184/200] step 1200/1250 loss≈6.6998
+[ListNet][epoch 185/200] step 200/1250 loss≈6.7002
+[ListNet][epoch 185/200] step 400/1250 loss≈6.7000
+[ListNet][epoch 185/200] step 600/1250 loss≈6.6998
+[ListNet][epoch 185/200] step 800/1250 loss≈6.7000
+[ListNet][epoch 185/200] step 1000/1250 loss≈6.6999
+[ListNet][epoch 185/200] step 1200/1250 loss≈6.6998
+[ListNet][epoch 186/200] step 200/1250 loss≈6.6997
+[ListNet][epoch 186/200] step 400/1250 loss≈6.7006
+[ListNet][epoch 186/200] step 600/1250 loss≈6.7002
+[ListNet][epoch 186/200] step 800/1250 loss≈6.7000
+[ListNet][epoch 186/200] step 1000/1250 loss≈6.6999
+[ListNet][epoch 186/200] step 1200/1250 loss≈6.6999
+[ListNet][epoch 187/200] step 200/1250 loss≈6.6998
+[ListNet][epoch 187/200] step 400/1250 loss≈6.7015
+[ListNet][epoch 187/200] step 600/1250 loss≈6.7010
+[ListNet][epoch 187/200] step 800/1250 loss≈6.7006
+[ListNet][epoch 187/200] step 1000/1250 loss≈6.7004
+[ListNet][epoch 187/200] step 1200/1250 loss≈6.7003
+[ListNet][epoch 188/200] step 200/1250 loss≈6.6996
+[ListNet][epoch 188/200] step 400/1250 loss≈6.6996
+[ListNet][epoch 188/200] step 600/1250 loss≈6.6998
+[ListNet][epoch 188/200] step 800/1250 loss≈6.7000
+[ListNet][epoch 188/200] step 1000/1250 loss≈6.6999
+[ListNet][epoch 188/200] step 1200/1250 loss≈6.6998
+[ListNet][epoch 189/200] step 200/1250 loss≈6.6993
+[ListNet][epoch 189/200] step 400/1250 loss≈6.6994
+[ListNet][epoch 189/200] step 600/1250 loss≈6.6994
+[ListNet][epoch 189/200] step 800/1250 loss≈6.6999
+[ListNet][epoch 189/200] step 1000/1250 loss≈6.7001
+[ListNet][epoch 189/200] step 1200/1250 loss≈6.7000
+[ListNet][epoch 190/200] step 200/1250 loss≈6.6997
+[ListNet][epoch 190/200] step 400/1250 loss≈6.6996
+[ListNet][epoch 190/200] step 600/1250 loss≈6.6997
+[ListNet][epoch 190/200] step 800/1250 loss≈6.7000
+[ListNet][epoch 190/200] step 1000/1250 loss≈6.7001
+[ListNet][epoch 190/200] step 1200/1250 loss≈6.7000
+[ListNet][epoch 191/200] step 200/1250 loss≈6.7007
+[ListNet][epoch 191/200] step 400/1250 loss≈6.7001
+[ListNet][epoch 191/200] step 600/1250 loss≈6.6999
+[ListNet][epoch 191/200] step 800/1250 loss≈6.6999
+[ListNet][epoch 191/200] step 1000/1250 loss≈6.6999
+[ListNet][epoch 191/200] step 1200/1250 loss≈6.6999
+[ListNet][epoch 192/200] step 200/1250 loss≈6.6994
+[ListNet][epoch 192/200] step 400/1250 loss≈6.7011
+[ListNet][epoch 192/200] step 600/1250 loss≈6.7009
+[ListNet][epoch 192/200] step 800/1250 loss≈6.7007
+[ListNet][epoch 192/200] step 1000/1250 loss≈6.7005
+[ListNet][epoch 192/200] step 1200/1250 loss≈6.7003
+[ListNet][epoch 193/200] step 200/1250 loss≈6.6998
+[ListNet][epoch 193/200] step 400/1250 loss≈6.7017
+[ListNet][epoch 193/200] step 600/1250 loss≈6.7011
+[ListNet][epoch 193/200] step 800/1250 loss≈6.7008
+[ListNet][epoch 193/200] step 1000/1250 loss≈6.7005
+[ListNet][epoch 193/200] step 1200/1250 loss≈6.7003
+[ListNet][epoch 194/200] step 200/1250 loss≈6.6999
+[ListNet][epoch 194/200] step 400/1250 loss≈6.6996
+[ListNet][epoch 194/200] step 600/1250 loss≈6.7007
+[ListNet][epoch 194/200] step 800/1250 loss≈6.7011
+[ListNet][epoch 194/200] step 1000/1250 loss≈6.7008
+[ListNet][epoch 194/200] step 1200/1250 loss≈6.7006
+[ListNet][epoch 195/200] step 200/1250 loss≈6.6999
+[ListNet][epoch 195/200] step 400/1250 loss≈6.7001
+[ListNet][epoch 195/200] step 600/1250 loss≈6.6999
+[ListNet][epoch 195/200] step 800/1250 loss≈6.6999
+[ListNet][epoch 195/200] step 1000/1250 loss≈6.6998
+[ListNet][epoch 195/200] step 1200/1250 loss≈6.6998
+[ListNet][epoch 196/200] step 200/1250 loss≈6.6997
+[ListNet][epoch 196/200] step 400/1250 loss≈6.6997
+[ListNet][epoch 196/200] step 600/1250 loss≈6.6998
+[ListNet][epoch 196/200] step 800/1250 loss≈6.6997
+[ListNet][epoch 196/200] step 1000/1250 loss≈6.6997
+[ListNet][epoch 196/200] step 1200/1250 loss≈6.6997
+[ListNet][epoch 197/200] step 200/1250 loss≈6.7000
+[ListNet][epoch 197/200] step 400/1250 loss≈6.6997
+[ListNet][epoch 197/200] step 600/1250 loss≈6.6997
+[ListNet][epoch 197/200] step 800/1250 loss≈6.6997
+[ListNet][epoch 197/200] step 1000/1250 loss≈6.7005
+[ListNet][epoch 197/200] step 1200/1250 loss≈6.7004
+[ListNet][epoch 198/200] step 200/1250 loss≈6.7000
+[ListNet][epoch 198/200] step 400/1250 loss≈6.7000
+[ListNet][epoch 198/200] step 600/1250 loss≈6.6998
+[ListNet][epoch 198/200] step 800/1250 loss≈6.6997
+[ListNet][epoch 198/200] step 1000/1250 loss≈6.7004
+[ListNet][epoch 198/200] step 1200/1250 loss≈6.7004
+[ListNet][epoch 199/200] step 200/1250 loss≈6.6992
+[ListNet][epoch 199/200] step 400/1250 loss≈6.6993
+[ListNet][epoch 199/200] step 600/1250 loss≈6.6995
+[ListNet][epoch 199/200] step 800/1250 loss≈6.6995
+[ListNet][epoch 199/200] step 1000/1250 loss≈6.6997
+[ListNet][epoch 199/200] step 1200/1250 loss≈6.6997
+[ListNet][epoch 200/200] step 200/1250 loss≈6.6993
+[ListNet][epoch 200/200] step 400/1250 loss≈6.7013
+[ListNet][epoch 200/200] step 600/1250 loss≈6.7010
+[ListNet][epoch 200/200] step 800/1250 loss≈6.7007
+[ListNet][epoch 200/200] step 1000/1250 loss≈6.7005
+[ListNet][epoch 200/200] step 1200/1250 loss≈6.7004
+[ListNet][epoch 200/200] loss≈6.7003
+[OutputAdaptation] mu≈-0.7297, sigma≈0.9986
+[RGNB] 训练 VAE...
+[VAE][epoch 10/50] loss≈0.9245
+[VAE][epoch 20/50] loss≈0.8446
+[VAE][epoch 30/50] loss≈0.5870
+[VAE][epoch 40/50] loss≈0.4192
+[VAE][epoch 50/50] loss≈0.3029
+[RGNB] 训练 Brownian Bridge (ROOT BrownianBridgeModel)...
+[Bridge][ROOT][epoch 20/100] loss≈0.2069
+[Bridge][ROOT][epoch 40/100] loss≈0.1875
+[Bridge][ROOT][epoch 60/100] loss≈0.1814
+[Bridge][ROOT][epoch 80/100] loss≈0.1787
+[Bridge][ROOT][epoch 100/100] loss≈0.1758
+[Sample][RGNB] low candidates: mean=0.9310, min=0.9281, max=0.9342; target_y=1.1715, cfg_weight=-1.50, lambda_rank=0.0300, lambda_manifold=0.0500
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+WARNING:root:[-0.  1.] or [0. 0.] is all 0s; this may be normal during initialization.
+Seed 0 结果: 100th=0.9772, 80th=0.9394, 50th=0.9161
+
+============================================================
+RGNB 评测汇总
+============================================================
+Normalized 100th percentile score:
+  Mean: 0.9772, Std: 0.0000
+Normalized 80th percentile score:
+  Mean: 0.9394, Std: 0.0000
+Normalized 50th percentile score:
+  Mean: 0.9161, Std: 0.0000
+============================================================

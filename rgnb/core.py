@@ -73,6 +73,124 @@ class PairsDataset(Dataset):
         return (p.x_0, p.y_0.view(1)), (p.x_t, p.y_t.view(1))
 
 
+class ListwiseDataset(Dataset):
+    """
+    Listwise 数据增强：从离线 (x, y) 中采样 m 个样本，拼成一个 list (X_list, y_list)。
+
+    每个样本输出：
+      - X_list: (m, feature_dim)
+      - y_list: (m,)
+
+    DataLoader 默认 collate 后：
+      - X: (batch_size, m, feature_dim)
+      - y: (batch_size, m)
+    """
+
+    def __init__(
+        self,
+        x: torch.Tensor,
+        y: torch.Tensor,
+        list_size: int = 1000,
+        num_lists: int = 10000,
+        replacement: bool = True,
+        seed: int | None = None,
+    ):
+        if x.ndim != 2:
+            raise ValueError(f"x 必须是 (N, D)，但拿到 {tuple(x.shape)}")
+        if y.ndim != 1:
+            y = y.view(-1)
+        if x.size(0) != y.size(0):
+            raise ValueError(f"x/y 样本数不一致：{x.size(0)} vs {y.size(0)}")
+        if list_size <= 1:
+            raise ValueError("list_size 必须 >= 2")
+        if not replacement and list_size > x.size(0):
+            raise ValueError("replacement=False 时 list_size 不能超过 N")
+
+        self.x = x
+        self.y = y
+        self.list_size = int(list_size)
+        self.num_lists = int(num_lists)
+        self.replacement = bool(replacement)
+        self._seed = seed
+
+    def __len__(self):
+        return self.num_lists
+
+    def __getitem__(self, idx: int):
+        n = self.x.size(0)
+
+        # 每个 idx 产生确定性采样（便于复现实验），同时不同 worker 也能稳定区分
+        if self._seed is None:
+            g = None
+        else:
+            g = torch.Generator(device="cpu")
+            g.manual_seed(int(self._seed) + int(idx))
+
+        if self.replacement:
+            inds = torch.randint(0, n, (self.list_size,), generator=g, device="cpu")
+        else:
+            inds = torch.randperm(n, generator=g, device="cpu")[: self.list_size]
+
+        x_list = self.x[inds]
+        y_list = self.y[inds]
+        return x_list, y_list
+
+
+def listnet_loss(y_true: torch.Tensor, y_pred: torch.Tensor) -> torch.Tensor:
+    """
+    稳定版 ListNet 损失。
+
+    输入：
+      - y_true: (B, m)
+      - y_pred: (B, m)
+
+    实现要求（数值稳定）：
+      - p_true = F.softmax(y_true, dim=-1)
+      - log_p_pred = F.log_softmax(y_pred, dim=-1)
+      - loss = -(p_true * log_p_pred).sum(dim=-1).mean()
+    """
+    if y_true.ndim != 2 or y_pred.ndim != 2:
+        raise ValueError(f"y_true/y_pred 必须都是 (B,m)，但得到 {tuple(y_true.shape)} / {tuple(y_pred.shape)}")
+    if y_true.shape != y_pred.shape:
+        raise ValueError(f"y_true/y_pred 形状必须一致，但得到 {tuple(y_true.shape)} vs {tuple(y_pred.shape)}")
+    p_true = F.softmax(y_true, dim=-1)
+    log_p_pred = F.log_softmax(y_pred, dim=-1)
+    return -(p_true * log_p_pred).sum(dim=-1).mean()
+
+
+class OutputAdaptation(nn.Module):
+    """
+    输出自适应（Z-score）wrapper：训练后用离线训练集拟合 (mu, sigma)，推理时统一输出
+      L_opt(x) = (f(x) - mu) / sigma
+    """
+
+    def __init__(self, base_model: nn.Module, eps: float = 1e-8):
+        super().__init__()
+        self.base_model = base_model
+        self.eps = float(eps)
+        self.register_buffer("mu", torch.zeros(()))
+        self.register_buffer("sigma", torch.ones(()))
+
+    @torch.no_grad()
+    def fit(self, x: torch.Tensor, batch_size: int = 4096) -> tuple[float, float]:
+        self.base_model.eval()
+        model_device = next(self.base_model.parameters()).device
+        preds: list[torch.Tensor] = []
+        for s in range(0, x.size(0), batch_size):
+            xb = x[s : s + batch_size]
+            xb = xb.to(model_device)
+            preds.append(self.base_model(xb).detach().float().cpu())
+        p = torch.cat(preds, dim=0).view(-1)
+        mu = p.mean()
+        sigma = p.std(unbiased=False).clamp_min(self.eps)
+        self.mu.copy_(mu)
+        self.sigma.copy_(sigma)
+        return float(mu.item()), float(sigma.item())
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        return (self.base_model(x) - self.mu) / self.sigma
+
+
 class EMA:
     """指数移动平均，与 ROOT runners.base.EMA 一致，测试时用 EMA 权重采样。"""
 
@@ -245,9 +363,9 @@ class Swish(nn.Module):
 
 
 class RankNet(nn.Module):
-    """3-layer MLP with pairwise ranking loss support."""
+    """作为代理模型的 MLP：用于 ListNet(listwise LTR) 训练，并在采样/优化时提供可微得分。"""
 
-    def __init__(self, dim: int, hidden: int = 128):
+    def __init__(self, dim: int, hidden: int = 2048):
         super().__init__()
         self.net = nn.Sequential(
             nn.Linear(dim, hidden),
@@ -391,6 +509,7 @@ class RGNBModel:
         self.config = config or RGNBConfig()
         # Rank & Manifold 模块：用于采样阶段的引导（rank guidance + manifold guidance）
         self.rank_net = RankNet(dim).to(self.config.device)
+        self.rank_proxy = OutputAdaptation(self.rank_net).to(self.config.device)
         self.vae = ManifoldVAE(dim, latent_dim=self.config.vae_latent_dim).to(self.config.device)
         self.synth = GPPosteriorMeanSampler(self.config)
 
@@ -406,37 +525,81 @@ class RGNBModel:
             self._ema = EMA(ema_decay=getattr(self.config, "ema_decay", 0.995))
             self._ema.register(self.bb_model)
 
-    def train_ranknet(self, x: torch.Tensor, y: torch.Tensor, epochs: int = 50, use_bce: bool = True):
-        x, y = x.to(self.config.device), y.to(self.config.device)
-        opt = torch.optim.Adam(self.rank_net.parameters(), lr=1e-3)
-        n = x.size(0)
+    def train_ranknet(
+        self,
+        x: torch.Tensor,
+        y: torch.Tensor,
+        epochs: int = 200,
+        list_size: int = 1000,
+        num_lists: int = 10000,
+        batch_size: int = 8,
+        replacement: bool = True,
+        seed: int = 0,
+        lr: float = 3e-4,
+        weight_decay: float = 1e-5,
+        log_every_batches: int = 200,
+    ):
+        """
+        用 ListNet(listwise LTR) 训练代理模型，并在训练结束后拟合 OutputAdaptation 的 (mu, sigma)。
+        """
+        device = torch.device(self.config.device)
+        # 重要：listwise 的采样/索引放在 CPU，更快也避免 CUDA tensor + CPU indices 的隐式同步
+        # batch 再搬到 GPU（pin_memory + non_blocking）更稳定。
+        x_cpu = x.detach().float().cpu()
+        y_cpu = y.detach().float().cpu().view(-1)
+
+        dataset = ListwiseDataset(
+            x=x_cpu,
+            y=y_cpu,
+            list_size=list_size,
+            num_lists=num_lists,
+            replacement=replacement,
+            seed=seed,
+        )
+        loader = DataLoader(
+            dataset,
+            batch_size=batch_size,
+            shuffle=True,
+            drop_last=False,
+            pin_memory=(device.type == "cuda"),
+        )
+
+        opt = torch.optim.Adam(self.rank_net.parameters(), lr=lr, weight_decay=weight_decay)
         self.rank_net.train()
+
         for epoch in range(epochs):
-            i = torch.randint(0, n, (min(512, n),), device=x.device)
-            j = torch.randint(0, n, (min(512, n),), device=x.device)
-            xi, xj = x[i], x[j]
-            yi, yj = y[i], y[j]
-            s_i, s_j = self.rank_net(xi), self.rank_net(xj)
+            epoch_loss = 0.0
+            n_batches = 0
+            for step, (x_list, y_list) in enumerate(loader):
+                # x_list: (B,m,D), y_list: (B,m)
+                x_list = x_list.to(device, non_blocking=True)
+                y_list = y_list.to(device, non_blocking=True)
 
-            pos_mask = yi >= yj
-            s_pos = torch.where(pos_mask, s_i, s_j)
-            s_neg = torch.where(pos_mask, s_j, s_i)
-            loss = RankNet.pairwise_bce_loss(s_pos, s_neg) if use_bce else RankNet.pairwise_hinge_loss(s_pos, s_neg)
-            opt.zero_grad()
-            loss.backward()
-            opt.step()
+                b, m, d = x_list.shape
+                scores = self.rank_net(x_list.view(b * m, d)).view(b, m)
+                loss = listnet_loss(y_list, scores)
+                opt.zero_grad()
+                loss.backward()
+                opt.step()
+                epoch_loss += float(loss.item())
+                n_batches += 1
+                if log_every_batches > 0 and (step + 1) % log_every_batches == 0:
+                    avg_so_far = epoch_loss / max(1, n_batches)
+                    print(
+                        f"[ListNet][epoch {epoch+1}/{epochs}] step {step+1}/{len(loader)} loss≈{avg_so_far:.4f}",
+                        flush=True,
+                    )
 
-            # 简单调试：每若干个 epoch 打印一次 pairwise 排序准确率
             if (epoch + 1) % max(1, epochs // 5) == 0:
-                with torch.no_grad():
-                    i_dbg = torch.randint(0, n, (min(2048, n),), device=x.device)
-                    j_dbg = torch.randint(0, n, (min(2048, n),), device=x.device)
-                    xi_dbg, xj_dbg = x[i_dbg], x[j_dbg]
-                    yi_dbg, yj_dbg = y[i_dbg], y[j_dbg]
-                    s_i_dbg = self.rank_net(xi_dbg)
-                    s_j_dbg = self.rank_net(xj_dbg)
-                    acc = ((yi_dbg >= yj_dbg) == (s_i_dbg >= s_j_dbg)).float().mean().item()
-                    print(f"[RankNet][epoch {epoch+1}/{epochs}] loss={loss.item():.4f}, pairwise_acc≈{acc:.3f}")
+                avg = epoch_loss / max(1, n_batches)
+                print(f"[ListNet][epoch {epoch+1}/{epochs}] loss≈{avg:.4f}", flush=True)
+
+        # 训练结束：冻结权重，并做输出自适应（Z-score）
+        self.rank_net.eval()
+        for p in self.rank_net.parameters():
+            p.requires_grad_(False)
+        mu, sigma = self.rank_proxy.fit(x_cpu)
+        print(f"[OutputAdaptation] mu≈{mu:.4f}, sigma≈{sigma:.4f}", flush=True)
 
     def train_vae(self, x: torch.Tensor, epochs: int = 50):
         x = x.to(self.config.device)
@@ -650,7 +813,7 @@ class RGNBModel:
 
                 # Rank 引导
                 if lam_rank > 0.0:
-                    rs = self.rank_net(x_for_g).sum()
+                    rs = self.rank_proxy(x_for_g).sum()
                     g_rank = torch.autograd.grad(rs, x_for_g, retain_graph=True)[0]
                     g_rank = g_rank / (g_rank.norm(dim=-1, keepdim=True) + 1e-8)
                 else:
@@ -683,5 +846,57 @@ class RGNBModel:
         # 采样结束，恢复 EMA 权重，并返回与外部无梯度关联的结果
         if self._ema is not None:
             self._ema.restore(self.bb_model)
+
+        return x_t.detach()
+
+    def gradient_ascent_search(
+        self,
+        x: torch.Tensor,
+        y: torch.Tensor,
+        is_discrete: bool = False,
+        step_size_continuous: float = 1e-3,
+        steps_continuous: int = 200,
+        step_size_discrete: float = 1e-1,
+        steps_discrete: int = 100,
+        clamp: tuple[float, float] | None = None,
+    ) -> torch.Tensor:
+        """
+        使用经过 OutputAdaptation 的代理模型 L_opt(x) 做梯度上升搜索。
+
+        - 连续任务：默认 η=1e-3, T=200
+        - 离散任务（在 logits 空间）：默认 η=1e-1, T=100
+
+        Args:
+            x, y: 离线数据（已在同一归一化空间中）
+            is_discrete: 若为 True，认为 x 处于 logits 连续空间
+            clamp: 可选，对 x 每步做范围裁剪（在归一化/logits 空间）
+        Returns:
+            x_T: (D,) 单个优化后的设计向量
+        """
+        device = self.config.device
+        x = x.to(device)
+        y = y.to(device).view(-1)
+
+        # 1) 起点：离线数据中最高分样本
+        idx0 = torch.argmax(y).item()
+        x_t = x[idx0].detach().clone().requires_grad_(True)
+
+        # 2) 超参数：连续/离散分开
+        if is_discrete:
+            eta = float(step_size_discrete)
+            T = int(steps_discrete)
+        else:
+            eta = float(step_size_continuous)
+            T = int(steps_continuous)
+
+        # 3) 迭代：x_{t+1} = x_t + η ∇_x L_opt(x)
+        self.rank_proxy.eval()
+        for _ in range(T):
+            score = self.rank_proxy(x_t.unsqueeze(0)).sum()
+            (g,) = torch.autograd.grad(score, x_t, create_graph=False, retain_graph=False)
+            x_t = (x_t + eta * g).detach().requires_grad_(True)
+            if clamp is not None:
+                lo, hi = clamp
+                x_t = x_t.clamp(lo, hi).detach().requires_grad_(True)
 
         return x_t.detach()

@@ -40,8 +40,16 @@ rgnb:
   update_ema_interval: 8
 
 training:
+  # 若希望仅作为 baseline，不训练 RankNet/VAE，可保持 0
   ranknet_epochs: 0
   vae_epochs: 0
+  # 即便当前不训练 RankNet，也给出 ListNet 默认超参，便于后续开启
+  list_size: 1000
+  num_lists: 10000
+  listwise_batch_size: 8
+  listwise_replacement: true
+  ranknet_lr: 3.0e-4
+  ranknet_weight_decay: 1.0e-5
 
 testing:
   clip_denoised: false

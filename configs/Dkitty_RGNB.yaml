@@ -55,12 +55,24 @@ rgnb:
 
 training:
   # 为 RankNet / VAE 打开训练轮数（可以根据资源再调大）
-  ranknet_epochs: 50
+  ranknet_epochs: 200
   vae_epochs: 50
 
   # Brownian Bridge 训练阶段是否启用 CFG dropout（配合 rgnb.cfg_dropout 使用）
   use_classifier_free_guidance: true
   classifier_free_guidance_prob: 0.15
+
+  # Listwise 数据增强超参：每个 list 的长度 m
+  list_size: 1000
+  # 构造的 list 总数 n
+  num_lists: 10000
+  # Listwise DataLoader 的 batch_size
+  listwise_batch_size: 8
+  # 采样时是否允许有放回
+  listwise_replacement: true
+  # ListNet 训练的学习率与正则
+  ranknet_lr: 3.0e-4
+  ranknet_weight_decay: 1.0e-5
 
 testing:
   clip_denoised: false

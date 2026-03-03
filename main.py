@@ -150,10 +150,28 @@ def train(config: dict, args) -> RGNBModel:
     training_cfg = config.get("training", {})
     ranknet_epochs = training_cfg.get("ranknet_epochs", 50)
     vae_epochs = training_cfg.get("vae_epochs", 50)
+    # ListNet / listwise 数据增强超参（有默认值，保持向后兼容）
+    list_size = training_cfg.get("list_size", 1000)
+    num_lists = training_cfg.get("num_lists", 10000)
+    listwise_batch_size = training_cfg.get("listwise_batch_size", 8)
+    listwise_replacement = training_cfg.get("listwise_replacement", True)
+    ranknet_lr = training_cfg.get("ranknet_lr", 3e-4)
+    ranknet_weight_decay = training_cfg.get("ranknet_weight_decay", 1e-5)
 
     # 训练 RankNet、VAE 与 Brownian Bridge
     print("[RGNB] 训练 RankNet...")
-    model.train_ranknet(x, y, epochs=ranknet_epochs)
+    model.train_ranknet(
+        x,
+        y,
+        epochs=ranknet_epochs,
+        list_size=list_size,
+        num_lists=num_lists,
+        batch_size=listwise_batch_size,
+        replacement=listwise_replacement,
+        seed=args.seed,
+        lr=ranknet_lr,
+        weight_decay=ranknet_weight_decay,
+    )
     print("[RGNB] 训练 VAE...")
     model.train_vae(x, epochs=vae_epochs)
     print("[RGNB] 训练 Brownian Bridge (ROOT BrownianBridgeModel)...")
